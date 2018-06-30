@@ -10,13 +10,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -39,22 +34,15 @@ public class ReqAndResLoggingFilter extends OncePerRequestFilter {
       MediaType.MULTIPART_FORM_DATA
   );
   Logger log = LoggerFactory.getLogger(ReqAndResLoggingFilter.class);
-  private static final Path path = Paths.get("loggerReq.txt");
-  private static BufferedWriter writer = null;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
-    try {
-      writer = Files.newBufferedWriter(path, Charset.forName("UTF-8"));
       if (isAsyncDispatch(request)) {
         filterChain.doFilter(request, response);
       } else {
         doFilterWrapped(wrapRequest(request), wrapResponse(response), filterChain);
       }
-    } finally {
-      writer.close();
-    }
   }
 
   protected void doFilterWrapped(ContentCachingRequestWrapper request,
@@ -104,17 +92,11 @@ public class ReqAndResLoggingFilter extends OncePerRequestFilter {
     log.info(" Session ID: ", RequestContextHolder.currentRequestAttributes().getSessionId());
   }
 
-  private void printLines(String... args) throws IOException {
+  private void printLines(String... args)  {
 
-    try {
       for (String varArgs : args) {
-        writer.write(varArgs);
-        writer.newLine();
+        log.info(varArgs);
       }
-    } catch (IOException ex) {
-      ex.printStackTrace();
-    }
-
   }
 
   private void logRequestBody(ContentCachingRequestWrapper request, String prefix) {
@@ -132,6 +114,7 @@ public class ReqAndResLoggingFilter extends OncePerRequestFilter {
     response.getHeaderNames().forEach(headerName ->
         response.getHeaders(headerName).forEach(headerValue ->
             log.info("{} {}: {}", prefix, headerName, headerValue)));
+   printLines("Logging reponse: ");
     printLines(prefix);
     log.info("{}", prefix);
     byte[] content = response.getContentAsByteArray();
@@ -149,12 +132,7 @@ public class ReqAndResLoggingFilter extends OncePerRequestFilter {
       try {
         String contentString = new String(content, contentEncoding);
         Stream.of(contentString.split("\r\n|\r|\n")).forEach(line -> {
-          try {
             printLines(line);
-          } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-          }
         });
 //              log.info("{} {}", prefix, line));
       } catch (UnsupportedEncodingException e) {
@@ -181,4 +159,16 @@ public class ReqAndResLoggingFilter extends OncePerRequestFilter {
       return new ContentCachingResponseWrapper(response);
     }
   }
+
+//  @Bean
+//  public CommonsRequestLoggingFilter requestLoggingFilter() {
+//    CommonsRequestLoggingFilter loggingFilter = new CommonsRequestLoggingFilter();
+//    loggingFilter.setIncludeClientInfo(true);
+//    loggingFilter.setIncludeQueryString(true);
+//    loggingFilter.setIncludePayload(true);
+//    loggingFilter.setMaxPayloadLength(100000);
+//    loggingFilter.setIncludeHeaders(false);
+//    loggingFilter.setAfterMessagePrefix("REQUEST DATA : ");
+//    return loggingFilter;
+//  }
 } 

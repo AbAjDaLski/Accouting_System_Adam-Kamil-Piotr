@@ -13,17 +13,7 @@ public class Application {
 
  private static Logger logger = LoggerFactory.getLogger(Application.class);
 
-  @Bean
-  public CommonsRequestLoggingFilter requestLoggingFilter() {
-    CommonsRequestLoggingFilter loggingFilter = new CommonsRequestLoggingFilter();
-    loggingFilter.setIncludeClientInfo(true);
-    loggingFilter.setIncludeQueryString(true);
-    loggingFilter.setIncludePayload(true);
-    loggingFilter.setMaxPayloadLength(100000);
-    loggingFilter.setIncludeHeaders(false);
-    loggingFilter.setAfterMessagePrefix("REQUEST DATA : ");
-    return loggingFilter;
-  }
+
 
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);
