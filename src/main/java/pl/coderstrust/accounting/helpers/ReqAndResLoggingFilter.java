@@ -114,7 +114,7 @@ public class ReqAndResLoggingFilter extends OncePerRequestFilter {
     response.getHeaderNames().forEach(headerName ->
         response.getHeaders(headerName).forEach(headerValue ->
             log.info("{} {}: {}", prefix, headerName, headerValue)));
-   printLines("Logging reponse: ");
+   printLines("RESPONSE: ");
     printLines(prefix);
     log.info("{}", prefix);
     byte[] content = response.getContentAsByteArray();

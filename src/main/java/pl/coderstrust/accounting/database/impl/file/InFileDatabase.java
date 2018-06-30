@@ -60,9 +60,10 @@ public class InFileDatabase implements Database {
     try {
       FileInvoiceHelper.writeInvoiceToFile(invoiceToWrite, databaseFilePath);
     } catch (IOException ieox) {
+      logger.error("IOException when opening databaseFile" + databaseFilePath + ieox);
       throw new RuntimeException(ieox);
     }
-    logger.info("Succesfully saves invoice with id = "+ id);
+    logger.info("Successfully saved invoice with id = " + id);
     return id;
   }
 
@@ -83,9 +84,11 @@ public class InFileDatabase implements Database {
   public Collection<Invoice> find(Invoice searchParams, LocalDate issuedDateFrom,
       LocalDate issuedDateTo) {
     searchResult = null;
+    logger.info("Trying to find invoice");
     try {
       searchResult = new HashSet(FileInvoiceHelper.readInvoicesFromFile(databaseFilePath));
     } catch (IOException ioex) {
+      logger.error("IOException when opening databaseFile" + databaseFilePath + ioex);
       ioex.printStackTrace();
     }
     if (searchResult != null) {
@@ -112,6 +115,7 @@ public class InFileDatabase implements Database {
         }
       }
     }
+    logger.info("Invoice successfully found");
     return searchResult;
   }
 
@@ -163,11 +167,14 @@ public class InFileDatabase implements Database {
 
   @Override
   public Collection<Invoice> getAll() {
+    logger.info("Trying to find invoices");
     try {
       invoices = FileInvoiceHelper.readInvoicesFromFile(databaseFilePath);
     } catch (IOException ioex) {
+      logger.error("IOException when opening databaseFile" + databaseFilePath + ioex);
       ioex.printStackTrace();
     }
+    logger.info("Invoices successfully found");
     return invoices;
   }
 }
