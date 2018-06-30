@@ -19,7 +19,9 @@ public class Application {
     loggingFilter.setIncludeClientInfo(true);
     loggingFilter.setIncludeQueryString(true);
     loggingFilter.setIncludePayload(true);
+    loggingFilter.setMaxPayloadLength(100000);
     loggingFilter.setIncludeHeaders(false);
+    loggingFilter.setAfterMessagePrefix("REQUEST DATA : ");
     return loggingFilter;
   }
 
