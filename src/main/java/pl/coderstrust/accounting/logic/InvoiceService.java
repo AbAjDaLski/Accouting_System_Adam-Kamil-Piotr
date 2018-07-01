@@ -1,9 +1,12 @@
 package pl.coderstrust.accounting.logic;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import pl.coderstrust.accounting.database.Database;
+import pl.coderstrust.accounting.database.InMemoryDatabase;
 import pl.coderstrust.accounting.model.Company;
 import pl.coderstrust.accounting.model.Invoice;
 import pl.coderstrust.accounting.model.InvoiceEntry;
@@ -16,6 +19,8 @@ import java.util.List;
 
 @Service
 public class InvoiceService {
+
+  private static Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
 
   private final Database database;
   private final InvoiceValidator invoiceValidator;
@@ -33,13 +38,16 @@ public class InvoiceService {
 
   public void updateInvoice(Invoice invoice) {
     if (invoice == null) {
+      logger.error("Invoice to update cannot be null");
       throw new IllegalArgumentException("Invoice to update cannot be null");
     }
     if (invoice.getId() == null) {
+      logger.error("Invoice to update must have a valid ID");
       throw new IllegalArgumentException("Invoice to update must have a valid ID");
     }
     Invoice current = database.get(invoice.getId());
     if (current == null) {
+      logger.error("Cannot update: An invoice with given ID : " + invoice.getId() + " doesn't exist");
       throw new IllegalArgumentException(
           "Cannot update: An invoice with given ID : " + invoice.getId() + " doesn't exist");
     } else {
@@ -54,6 +62,7 @@ public class InvoiceService {
           sb.append(exception.getMessage());
           sb.append("\n");
         }
+        logger.error(sb.toString());
         throw new IllegalArgumentException(sb.toString());
       }
     }
@@ -76,6 +85,7 @@ public class InvoiceService {
     if (database.get(id) != null) {
       database.removeInvoice(id);
     } else {
+      logger.error("Cannot remove: An invoice with given ID : " + id + " doesn't exist");
       throw new IllegalArgumentException(
           "Cannot remove: An invoice with given ID : " + id + " doesn't exist");
     }

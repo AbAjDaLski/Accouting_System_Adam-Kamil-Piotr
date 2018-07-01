@@ -1,5 +1,7 @@
 package pl.coderstrust.accounting.database;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import pl.coderstrust.accounting.model.Invoice;
 import pl.coderstrust.accounting.model.InvoiceEntry;
@@ -18,30 +20,37 @@ public class InMemoryDatabase implements Database {
 
   private int id = 0;
 
+  private static Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
+
   @Override
   public int saveInvoice(Invoice invoice) {
     invoices
         .put(++id, new Invoice(id, invoice.getIdentifier(), invoice.getIssuedDate(),
             invoice.getBuyer(), invoice.getSeller(), invoice.getEntries()));
+    logger.info("Successfully saved invoice with id = " + id);
     return id;
   }
 
   @Override
   public void updateInvoice(Invoice invoice) {
     if (!invoices.containsKey(invoice.getId())) {
+      logger.error("The invoice with given ID does not exist: " + invoice.getId());
       throw new IllegalArgumentException(
           "The invoice with given ID does not exist: " + invoice.getId());
     }
+    logger.info("Invoice successfully updated");
     invoices.put(invoice.getId(), invoice);
   }
 
   @Override
   public void removeInvoice(int id) {
+    logger.info("Invoice successfully removed");
     invoices.remove(id);
   }
 
   @Override
   public Invoice get(int id) {
+    logger.info("Invoice successfully found");
     return invoices.get(id);
   }
 
@@ -106,11 +115,13 @@ public class InMemoryDatabase implements Database {
         }
       }
     }
+    logger.info("Invoice successfully found");
     return result;
   }
 
   @Override
   public Collection<Invoice> getAll() {
+    logger.info("Invoices successfully found");
     return invoices.values();
   }
 }

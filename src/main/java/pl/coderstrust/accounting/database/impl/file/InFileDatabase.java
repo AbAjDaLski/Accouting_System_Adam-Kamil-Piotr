@@ -48,7 +48,6 @@ public class InFileDatabase implements Database {
 
   @Override
   public int saveInvoice(Invoice invoice) {
-    logger.info("Trying to save invoice");
     try {
       id = FileInvoiceHelper.getAndIncrementLastId(idFilePath);
     } catch (IOException ioex) {
@@ -84,7 +83,6 @@ public class InFileDatabase implements Database {
   public Collection<Invoice> find(Invoice searchParams, LocalDate issuedDateFrom,
       LocalDate issuedDateTo) {
     searchResult = null;
-    logger.info("Trying to find invoice");
     try {
       searchResult = new HashSet(FileInvoiceHelper.readInvoicesFromFile(databaseFilePath));
     } catch (IOException ioex) {
@@ -167,7 +165,6 @@ public class InFileDatabase implements Database {
 
   @Override
   public Collection<Invoice> getAll() {
-    logger.info("Trying to find invoices");
     try {
       invoices = FileInvoiceHelper.readInvoicesFromFile(databaseFilePath);
     } catch (IOException ioex) {

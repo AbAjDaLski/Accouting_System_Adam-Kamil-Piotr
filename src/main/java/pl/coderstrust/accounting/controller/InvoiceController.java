@@ -1,5 +1,8 @@
 package pl.coderstrust.accounting.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -31,6 +34,10 @@ import java.util.Collection;
 @Api(value = "/{invoices}", description = "Operations on invoices")
 public class InvoiceController {
 
+  private static Logger logger = LoggerFactory.getLogger(InvoiceController.class);
+
+  @Autowired
+  private InvoiceService invoiceService;
   private final InvoiceValidator invoiceValidator = new InvoiceValidator(
       new InvoiceEntryValidator(), new CompanyValidator());
   private InvoiceService invoiceService = new InvoiceService(new InMemoryDatabase(),
@@ -45,6 +52,7 @@ public class InvoiceController {
       @ApiResponse(code = 404, message = "List of invoices is empty")})
   @GetMapping
   public Collection<Invoice> findInvoices() {
+    logger.info("Trying to find invoices");
     return invoiceService.getAll();
   }
 
@@ -59,6 +67,9 @@ public class InvoiceController {
   @GetMapping("/{id}")
   public ResponseEntity<?> findSingleIvoiceById(
       @PathVariable(name = "id", required = true) int id) {
+    logger.info("Trying to find invoice by id");
+    return invoiceService
+        .findInvoices(new Invoice(id, null, null, null, null, null), null, null);
     Collection<Invoice> schearch = invoiceService.findInvoices(
         new Invoice(id, null, null, null, null, null), null, null);
     return schearch.isEmpty() ? ResponseEntity.notFound().build()
@@ -77,6 +88,7 @@ public class InvoiceController {
   public Collection<Invoice> findSingleIvoiceByDateRange(
       @PathVariable("dateFrom") @DateTimeFormat(iso = ISO.DATE) LocalDate dateFrom,
       @PathVariable("dateTo") @DateTimeFormat(iso = ISO.DATE) LocalDate dateTo) {
+    logger.info("Trying to find invoices withing set date range");
     return invoiceService
         .findInvoices(null,
             dateFrom, dateTo);
@@ -90,6 +102,9 @@ public class InvoiceController {
       @ApiResponse(code = 401, message = "Access unauthorized "),
       @ApiResponse(code = 403, message = "Access forbidden ")})
   @PostMapping
+  public int saveInvoice(@RequestBody Invoice invoice) {
+    logger.info("Trying to save invoice");
+    return invoiceService.saveInvoice(invoice);
   public ResponseEntity<?> saveInvoice(@RequestBody Invoice invoice) {
     Collection<InvoiceValidationException> validationErrors = invoiceValidator
         .validateInvoiceForSave(invoice);
@@ -109,9 +124,13 @@ public class InvoiceController {
       @ApiResponse(code = 500, message = "Didn't remove, invoice is not exist")})
   @DeleteMapping
   public void removeInvoice(@RequestBody int id) {
+    logger.info("Trying to remove invoice");
     invoiceService.removeInvoice(id);
   }
 
+  @PutMapping
+  public void updateInvoice(@RequestBody Invoice invoice) {
+    logger.info("Trying to update invoice");
   @ApiOperation(value = "Update invoice by id",
       notes = "Method update exist invoice")
   @ApiResponses(value = {

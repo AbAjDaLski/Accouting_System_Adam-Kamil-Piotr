@@ -1,5 +1,9 @@
 package pl.coderstrust.accounting.helpers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pl.coderstrust.accounting.database.InMemoryDatabase;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,11 +15,15 @@ import java.util.List;
 
 public class FileHelper {
 
+  private static Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
+
   public static void writeToFile(List<String> lines, String filePath) throws IOException {
     if (lines == null) {
+      logger.error("Parameter lines may not be null");
       throw new IllegalArgumentException("Parameter lines may not be null");
     }
     if (filePath == null) {
+      logger.error("Parameter lines may not be null");
       throw new IllegalArgumentException("Parameter filePath may not be null");
     }
     try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath))) {
@@ -42,9 +50,11 @@ public class FileHelper {
   public static void appendToFile(String line, String filePath)
       throws IOException {
     if (line == null) {
+      logger.error("Parameter lines may not be null");
       throw new IllegalArgumentException("Parameter line may not be null");
     }
     if (filePath == null) {
+      logger.error("Parameter lines may not be null");
       throw new IllegalArgumentException("Parameter filePath may not be null");
     }
     try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath, true))) {

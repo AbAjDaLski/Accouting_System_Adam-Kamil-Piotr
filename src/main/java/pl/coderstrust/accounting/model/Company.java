@@ -65,12 +65,8 @@ public class Company {
 
   @Override
   public String toString() {
-    return "Company{" +
-        "name='" + name + '\'' +
-        ", taxId='" + taxId + '\'' +
-        ", streetAndNumber='" + streetAndNumber + '\'' +
-        ", postalCode='" + postalCode + '\'' +
-        ", location='" + location + '\'' +
-        '}';
+    return "Company{" + "name='" + name + '\'' + ", taxId='" + taxId + '\'' + ", streetAndNumber='"
+        + streetAndNumber + '\'' + ", postalCode='" + postalCode + '\'' + ", location='" + location
+        + '\'' + '}';
   }
 }

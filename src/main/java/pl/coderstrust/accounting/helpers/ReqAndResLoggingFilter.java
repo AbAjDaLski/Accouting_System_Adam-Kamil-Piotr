@@ -38,11 +38,11 @@ public class ReqAndResLoggingFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
-      if (isAsyncDispatch(request)) {
-        filterChain.doFilter(request, response);
-      } else {
-        doFilterWrapped(wrapRequest(request), wrapResponse(response), filterChain);
-      }
+    if (isAsyncDispatch(request)) {
+      filterChain.doFilter(request, response);
+    } else {
+      doFilterWrapped(wrapRequest(request), wrapResponse(response), filterChain);
+    }
   }
 
   protected void doFilterWrapped(ContentCachingRequestWrapper request,
@@ -92,11 +92,11 @@ public class ReqAndResLoggingFilter extends OncePerRequestFilter {
     log.info(" Session ID: ", RequestContextHolder.currentRequestAttributes().getSessionId());
   }
 
-  private void printLines(String... args)  {
+  private void printLines(String... args) {
 
-      for (String varArgs : args) {
-        log.info(varArgs);
-      }
+    for (String varArgs : args) {
+      log.info(varArgs);
+    }
   }
 
   private void logRequestBody(ContentCachingRequestWrapper request, String prefix) {
@@ -114,7 +114,7 @@ public class ReqAndResLoggingFilter extends OncePerRequestFilter {
     response.getHeaderNames().forEach(headerName ->
         response.getHeaders(headerName).forEach(headerValue ->
             log.info("{} {}: {}", prefix, headerName, headerValue)));
-   printLines("RESPONSE: ");
+    printLines("RESPONSE: ");
     printLines(prefix);
     log.info("{}", prefix);
     byte[] content = response.getContentAsByteArray();
@@ -132,14 +132,12 @@ public class ReqAndResLoggingFilter extends OncePerRequestFilter {
       try {
         String contentString = new String(content, contentEncoding);
         Stream.of(contentString.split("\r\n|\r|\n")).forEach(line -> {
-            printLines(line);
+          printLines(line);
         });
-//              log.info("{} {}", prefix, line));
-      } catch (UnsupportedEncodingException e) {
+      } catch (UnsupportedEncodingException ex) {
         log.info("{} [{} bytes content]", prefix, content.length);
       }
     } else {
-
       log.info("{} [{} bytes content]", prefix, content.length);
     }
   }
@@ -159,16 +157,4 @@ public class ReqAndResLoggingFilter extends OncePerRequestFilter {
       return new ContentCachingResponseWrapper(response);
     }
   }
-
-//  @Bean
-//  public CommonsRequestLoggingFilter requestLoggingFilter() {
-//    CommonsRequestLoggingFilter loggingFilter = new CommonsRequestLoggingFilter();
-//    loggingFilter.setIncludeClientInfo(true);
-//    loggingFilter.setIncludeQueryString(true);
-//    loggingFilter.setIncludePayload(true);
-//    loggingFilter.setMaxPayloadLength(100000);
-//    loggingFilter.setIncludeHeaders(false);
-//    loggingFilter.setAfterMessagePrefix("REQUEST DATA : ");
-//    return loggingFilter;
-//  }
 } 
