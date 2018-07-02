@@ -15,8 +15,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class FileInvoiceHelper {
+
   private static ObjectMapper mapper = new ObjectMapper();
   private static Logger logger = LoggerFactory.getLogger(InFileDatabase.class);
+
   static {
     mapper.registerModule(new JavaTimeModule());
     mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
