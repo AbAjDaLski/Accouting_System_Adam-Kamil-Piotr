@@ -52,7 +52,7 @@ public class InvoiceController {
       @ApiResponse(code = 404, message = "List of invoices is empty")})
   @GetMapping
   public Collection<Invoice> findInvoices() {
-    logger.info("Trying to find invoices");
+    logger.info("Received find invoices request");
     return invoiceService.getAll();
   }
 
@@ -67,7 +67,7 @@ public class InvoiceController {
   @GetMapping("/{id}")
   public ResponseEntity<?> findSingleIvoiceById(
       @PathVariable(name = "id", required = true) int id) {
-    logger.info("Trying to find invoice by id");
+    logger.info("Received find by id invoices request");
     return invoiceService
         .findInvoices(new Invoice(id, null, null, null, null, null), null, null);
     Collection<Invoice> schearch = invoiceService.findInvoices(
@@ -88,7 +88,7 @@ public class InvoiceController {
   public Collection<Invoice> findSingleIvoiceByDateRange(
       @PathVariable("dateFrom") @DateTimeFormat(iso = ISO.DATE) LocalDate dateFrom,
       @PathVariable("dateTo") @DateTimeFormat(iso = ISO.DATE) LocalDate dateTo) {
-    logger.info("Trying to find invoices withing set date range");
+    logger.info("Received find invoices withing set date range request");
     return invoiceService
         .findInvoices(null,
             dateFrom, dateTo);
@@ -103,7 +103,7 @@ public class InvoiceController {
       @ApiResponse(code = 403, message = "Access forbidden ")})
   @PostMapping
   public int saveInvoice(@RequestBody Invoice invoice) {
-    logger.info("Trying to save invoice");
+    logger.info("Received save invoice request");
     return invoiceService.saveInvoice(invoice);
   public ResponseEntity<?> saveInvoice(@RequestBody Invoice invoice) {
     Collection<InvoiceValidationException> validationErrors = invoiceValidator
@@ -124,12 +124,13 @@ public class InvoiceController {
       @ApiResponse(code = 500, message = "Didn't remove, invoice is not exist")})
   @DeleteMapping
   public void removeInvoice(@RequestBody int id) {
-    logger.info("Trying to remove invoice");
+    logger.info("Received remove invoice request");
     invoiceService.removeInvoice(id);
   }
 
   @PutMapping
   public void updateInvoice(@RequestBody Invoice invoice) {
+    logger.info("Received update invoice request");
     logger.info("Trying to update invoice");
   @ApiOperation(value = "Update invoice by id",
       notes = "Method update exist invoice")

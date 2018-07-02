@@ -16,15 +16,17 @@ import java.util.List;
 public class FileHelper {
 
   private static Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
+  private static final String filePathCannotBeNull = "File path cannot be null";
+  private static final String lineCannotBeNull = "Line cannot be null";
 
   public static void writeToFile(List<String> lines, String filePath) throws IOException {
     if (lines == null) {
-      logger.error("Parameter lines may not be null");
-      throw new IllegalArgumentException("Parameter lines may not be null");
+      logger.error(lineCannotBeNull);
+      throw new IllegalArgumentException(lineCannotBeNull);
     }
     if (filePath == null) {
-      logger.error("Parameter lines may not be null");
-      throw new IllegalArgumentException("Parameter filePath may not be null");
+      logger.error(filePathCannotBeNull);
+      throw new IllegalArgumentException(filePathCannotBeNull);
     }
     try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath))) {
       for (String line : lines) {
@@ -50,12 +52,12 @@ public class FileHelper {
   public static void appendToFile(String line, String filePath)
       throws IOException {
     if (line == null) {
-      logger.error("Parameter lines may not be null");
-      throw new IllegalArgumentException("Parameter line may not be null");
+      logger.error(lineCannotBeNull);
+      throw new IllegalArgumentException(lineCannotBeNull);
     }
     if (filePath == null) {
-      logger.error("Parameter lines may not be null");
-      throw new IllegalArgumentException("Parameter filePath may not be null");
+      logger.error(filePathCannotBeNull);
+      throw new IllegalArgumentException(filePathCannotBeNull);
     }
     try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath, true))) {
       bufferedWriter.append(line);

@@ -13,44 +13,44 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+
 @Repository
 public class InMemoryDatabase implements Database {
 
   private final Map<Integer, Invoice> invoices = new HashMap<>();
-
   private int id = 0;
-
   private static Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
+  String wrongID = "The invoice with given ID does not exist: ";
 
   @Override
   public int saveInvoice(Invoice invoice) {
     invoices
         .put(++id, new Invoice(id, invoice.getIdentifier(), invoice.getIssuedDate(),
             invoice.getBuyer(), invoice.getSeller(), invoice.getEntries()));
-    logger.info("Successfully saved invoice with id = " + id);
+    logger.info("Saved invoice with id = " + id);
     return id;
   }
 
   @Override
   public void updateInvoice(Invoice invoice) {
     if (!invoices.containsKey(invoice.getId())) {
-      logger.error("The invoice with given ID does not exist: " + invoice.getId());
+      logger.error(wrongID + invoice.getId());
       throw new IllegalArgumentException(
-          "The invoice with given ID does not exist: " + invoice.getId());
+          wrongID + invoice.getId());
     }
-    logger.info("Invoice successfully updated");
+    logger.info("Invoice updated");
     invoices.put(invoice.getId(), invoice);
   }
 
   @Override
   public void removeInvoice(int id) {
-    logger.info("Invoice successfully removed");
+    logger.info("Invoice " + id + " removed");
     invoices.remove(id);
   }
 
   @Override
   public Invoice get(int id) {
-    logger.info("Invoice successfully found");
+    logger.info("Invoice found");
     return invoices.get(id);
   }
 
@@ -115,13 +115,13 @@ public class InMemoryDatabase implements Database {
         }
       }
     }
-    logger.info("Invoice successfully found");
+    logger.info("Invoice found");
     return result;
   }
 
   @Override
   public Collection<Invoice> getAll() {
-    logger.info("Invoices successfully found");
+    logger.info("Invoices found");
     return invoices.values();
   }
 }

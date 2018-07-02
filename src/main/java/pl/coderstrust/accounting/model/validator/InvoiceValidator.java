@@ -14,12 +14,15 @@ import java.util.List;
 public class InvoiceValidator {
 
   private final InvoiceEntryValidator invoiceEntryValidator;
-
   private final CompanyValidator companyValidator;
-
   private static Logger logger = LoggerFactory.getLogger(InvoiceEntryValidator.class);
-
   List<InvoiceValidationException> validationExceptions = new LinkedList<>();
+  private static final String expectedNotEmptyId = "Expected not empty Id";
+  private static final String idShouldBeGratedThanZero = "Expected Id to be greater than 0, got: ";
+  private static final String expectedNotEmptyIssueDate = "Expected not empty issue date";
+  private static final String expectedDateNotGraterThanToday = "Expected issue date not greater"
+      + " than today date, got: ";
+  private static final String expNotEmptyInvIdentifier = "Expected not empty invoice identifier";
 
   public InvoiceValidator(InvoiceEntryValidator invoiceEntryValidator,
       CompanyValidator companyValidator) {
@@ -39,36 +42,38 @@ public class InvoiceValidator {
     List<InvoiceValidationException> validationExceptions = new LinkedList<>();
     if (checkForId) {
       if (invoice.getId() == null && checkForId) {
-        logger.error("Expected not empty Id");
-        validationExceptions.add(new InvoiceValidationException("Expected not empty Id"));
+        logger.error(expectedNotEmptyId);
+        validationExceptions.add(new InvoiceValidationException(expectedNotEmptyId));
       } else {
         if (invoice.getId() < 0) {
-          logger.error("Expected Id to be greater than 0, got: " + String.valueOf(invoice.getId()));
+          logger.error(idShouldBeGratedThanZero + String.valueOf(invoice.getId()));
           validationExceptions.add(new InvoiceValidationException(
-              "Expected Id to be greater than 0, got: " + String.valueOf(invoice.getId())));
+              idShouldBeGratedThanZero + String.valueOf(invoice.getId())));
         }
       }
     }
     if (invoice.getIssuedDate() == null) {
-      logger.error("Expected not empty issue date");
+
+      logger.error(expectedNotEmptyIssueDate);
       validationExceptions
-          .add(new InvoiceValidationException("Expected not empty issue date"));
+          .add(new InvoiceValidationException(expectedNotEmptyIssueDate));
     } else {
       if (invoice.getIssuedDate().isAfter(LocalDate.now())) {
-        logger.error("Expected issue date not greater than today date, got: " + String
+        logger.error(expectedDateNotGraterThanToday + String
             .valueOf(invoice.getIssuedDate()));
         validationExceptions.add(new InvoiceValidationException(
-            "Expected issue date not greater than today date, got: " + String
+            expectedDateNotGraterThanToday + String
                 .valueOf(invoice.getIssuedDate())));
       }
     }
+
     if (invoice.getIdentifier() == null) {
-      logger.error(("Expected not empty invoice identifier"));
+      logger.error(expNotEmptyInvIdentifier);
       validationExceptions.add(
-          new InvoiceValidationException("Expected not empty invoice identifier"));
+          new InvoiceValidationException(expNotEmptyInvIdentifier));
     }
     if (invoice.getEntries() == null) {
-      logger.error(("Expected not empty invoice identifier"));
+      logger.error(expNotEmptyInvIdentifier);
       validationExceptions.add(new InvoiceValidationException(
           "Expected not empty invoice entries"));
     } else {
@@ -77,7 +82,7 @@ public class InvoiceValidator {
               "Validation of entry failed, message: " + validationException))));
     }
     if (invoice.getBuyer() == null) {
-      logger.error(("Expected not empty invoice identifier"));
+      logger.error(expNotEmptyInvIdentifier);
       validationExceptions.add(new InvoiceValidationException("Expected not empty buyer"));
     } else {
       companyValidator.validate(invoice.getBuyer())

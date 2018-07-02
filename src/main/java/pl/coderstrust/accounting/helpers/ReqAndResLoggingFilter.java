@@ -31,8 +31,8 @@ public class ReqAndResLoggingFilter extends OncePerRequestFilter {
       MediaType.APPLICATION_XML,
       MediaType.valueOf("application/*+json"),
       MediaType.valueOf("application/*+xml"),
-      MediaType.MULTIPART_FORM_DATA
-  );
+      MediaType.MULTIPART_FORM_DATA);
+
   Logger log = LoggerFactory.getLogger(ReqAndResLoggingFilter.class);
 
   @Override
