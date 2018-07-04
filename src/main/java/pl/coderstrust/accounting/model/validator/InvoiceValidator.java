@@ -17,12 +17,15 @@ public class InvoiceValidator {
   private final CompanyValidator companyValidator;
   private static Logger logger = LoggerFactory.getLogger(InvoiceEntryValidator.class);
   List<InvoiceValidationException> validationExceptions = new LinkedList<>();
-  private static final String expectedNotEmptyId = "Expected not empty Id";
-  private static final String idShouldBeGratedThanZero = "Expected Id to be greater than 0, got: ";
-  private static final String expectedNotEmptyIssueDate = "Expected not empty issue date";
-  private static final String expectedDateNotGraterThanToday = "Expected issue date not greater"
+  private static final String EXPECTED_NOT_EMPTY_ID = "Expected not empty Id";
+  private static final String ID_SHOULD_BE_GRATED_THAN_ZERO = "Expected Id to be greater than 0,"
+      + " got: ";
+  private static final String EXPECTED_NOT_EMPTY_ISSUE_DATE = "Expected not empty issue date";
+  private static final String EXPECTED_DATE_NOT_GRATER_THAN_TODAY = "Expected issue date not"
+      + " greater"
       + " than today date, got: ";
-  private static final String expNotEmptyInvIdentifier = "Expected not empty invoice identifier";
+  private static final String EXP_NOT_EMPTY_INV_IDENTIFIER = "Expected not empty invoice "
+      + "identifier";
 
   public InvoiceValidator(InvoiceEntryValidator invoiceEntryValidator,
       CompanyValidator companyValidator) {
@@ -42,38 +45,38 @@ public class InvoiceValidator {
     List<InvoiceValidationException> validationExceptions = new LinkedList<>();
     if (checkForId) {
       if (invoice.getId() == null && checkForId) {
-        logger.error(expectedNotEmptyId);
-        validationExceptions.add(new InvoiceValidationException(expectedNotEmptyId));
+        logger.error(EXPECTED_NOT_EMPTY_ID);
+        validationExceptions.add(new InvoiceValidationException(EXPECTED_NOT_EMPTY_ID));
       } else {
         if (invoice.getId() < 0) {
-          logger.error(idShouldBeGratedThanZero + String.valueOf(invoice.getId()));
+          logger.error(ID_SHOULD_BE_GRATED_THAN_ZERO + String.valueOf(invoice.getId()));
           validationExceptions.add(new InvoiceValidationException(
-              idShouldBeGratedThanZero + String.valueOf(invoice.getId())));
+              ID_SHOULD_BE_GRATED_THAN_ZERO + String.valueOf(invoice.getId())));
         }
       }
     }
     if (invoice.getIssuedDate() == null) {
 
-      logger.error(expectedNotEmptyIssueDate);
+      logger.error(EXPECTED_NOT_EMPTY_ISSUE_DATE);
       validationExceptions
-          .add(new InvoiceValidationException(expectedNotEmptyIssueDate));
+          .add(new InvoiceValidationException(EXPECTED_NOT_EMPTY_ISSUE_DATE));
     } else {
       if (invoice.getIssuedDate().isAfter(LocalDate.now())) {
-        logger.error(expectedDateNotGraterThanToday + String
+        logger.error(EXPECTED_DATE_NOT_GRATER_THAN_TODAY + String
             .valueOf(invoice.getIssuedDate()));
         validationExceptions.add(new InvoiceValidationException(
-            expectedDateNotGraterThanToday + String
+            EXPECTED_DATE_NOT_GRATER_THAN_TODAY + String
                 .valueOf(invoice.getIssuedDate())));
       }
     }
 
     if (invoice.getIdentifier() == null) {
-      logger.error(expNotEmptyInvIdentifier);
+      logger.error(EXP_NOT_EMPTY_INV_IDENTIFIER);
       validationExceptions.add(
-          new InvoiceValidationException(expNotEmptyInvIdentifier));
+          new InvoiceValidationException(EXP_NOT_EMPTY_INV_IDENTIFIER));
     }
     if (invoice.getEntries() == null) {
-      logger.error(expNotEmptyInvIdentifier);
+      logger.error(EXP_NOT_EMPTY_INV_IDENTIFIER);
       validationExceptions.add(new InvoiceValidationException(
           "Expected not empty invoice entries"));
     } else {
@@ -82,7 +85,7 @@ public class InvoiceValidator {
               "Validation of entry failed, message: " + validationException))));
     }
     if (invoice.getBuyer() == null) {
-      logger.error(expNotEmptyInvIdentifier);
+      logger.error(EXP_NOT_EMPTY_INV_IDENTIFIER);
       validationExceptions.add(new InvoiceValidationException("Expected not empty buyer"));
     } else {
       companyValidator.validate(invoice.getBuyer())

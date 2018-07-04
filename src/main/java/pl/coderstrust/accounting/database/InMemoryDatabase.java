@@ -50,7 +50,7 @@ public class InMemoryDatabase implements Database {
 
   @Override
   public Invoice get(int id) {
-    logger.info("Invoice found");
+    logger.info("Invoice " + id + " found");
     return invoices.get(id);
   }
 
@@ -115,13 +115,13 @@ public class InMemoryDatabase implements Database {
         }
       }
     }
-    logger.info("Invoice found");
+    logger.info("Invoice" + id + " found");
     return result;
   }
 
   @Override
   public Collection<Invoice> getAll() {
-    logger.info("Invoices found");
+    logger.info("Returning list of invoices");
     return invoices.values();
   }
 }

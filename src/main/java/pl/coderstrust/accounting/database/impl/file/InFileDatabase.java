@@ -30,8 +30,8 @@ public class InFileDatabase implements Database {
   private Set<Invoice> searchResult = new HashSet<>();
   private List<Invoice> invoices = new ArrayList<>();
   private static Logger logger = LoggerFactory.getLogger(InFileDatabase.class);
-  private static final String ioexFileMessage = "IOException when opening idFile ";
-  private static final String ioexDatabaseFile = "IOException when opening databaseFile";
+  private static final String IOEXCEPTION_WHEN_OPENING_ID_FILE = "IOException when opening idFile ";
+  private static final String IOEXCEPTION_WHEN_OPENING_DATABASE_FILE = "IOException when opening databaseFile";
 
   @Autowired
   public InFileDatabase(@Value("database.file.databaseFilePath") String databaseFilePath,
@@ -51,15 +51,15 @@ public class InFileDatabase implements Database {
     try {
       id = FileInvoiceHelper.getAndIncrementLastId(idFilePath);
     } catch (IOException ioex) {
-      logger.error(ioexFileMessage + idFilePath, ioex);
-      throw new RuntimeException(ioexFileMessage + idFilePath, ioex);
+      logger.error(IOEXCEPTION_WHEN_OPENING_ID_FILE + idFilePath, ioex);
+      throw new RuntimeException(IOEXCEPTION_WHEN_OPENING_ID_FILE + idFilePath, ioex);
     }
     Invoice invoiceToWrite = new Invoice(id, invoice.getIdentifier(), invoice.getIssuedDate(),
         invoice.getBuyer(), invoice.getSeller(), invoice.getEntries());
     try {
       FileInvoiceHelper.writeInvoiceToFile(invoiceToWrite, databaseFilePath);
     } catch (IOException ieox) {
-      logger.error(ioexDatabaseFile + databaseFilePath + ieox);
+      logger.error(IOEXCEPTION_WHEN_OPENING_DATABASE_FILE + databaseFilePath + ieox);
       throw new RuntimeException(ieox);
     }
     logger.info("Invoice saved with id = " + id);
@@ -87,7 +87,7 @@ public class InFileDatabase implements Database {
       searchResult = new HashSet(FileInvoiceHelper.readInvoicesFromFile(databaseFilePath));
     } catch (IOException ioex) {
 
-      logger.error(ioexDatabaseFile + databaseFilePath + ioex);
+      logger.error(IOEXCEPTION_WHEN_OPENING_DATABASE_FILE + databaseFilePath + ioex);
       ioex.printStackTrace();
     }
     if (searchResult != null) {
@@ -169,7 +169,7 @@ public class InFileDatabase implements Database {
     try {
       invoices = FileInvoiceHelper.readInvoicesFromFile(databaseFilePath);
     } catch (IOException ioex) {
-      logger.error(ioexDatabaseFile + databaseFilePath + ioex);
+      logger.error(IOEXCEPTION_WHEN_OPENING_DATABASE_FILE + databaseFilePath + ioex);
       ioex.printStackTrace();
     }
     logger.info("Invoices found");
