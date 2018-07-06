@@ -174,7 +174,7 @@ public class InvoiceControllerTest {
         .andExpect(status().isOk());
 
     mockMvc
-        .perform(put(urlInvoices)
+        .perform(put(urlInvoices + "/1")
             .content("{\"id\":1,\"identifier\":\"UpdatedIdentifier\",\"issuedDate\":\"2018-02-01\""
                     + ",\""
                     + "buyer\":{\"name\":\"CompanyBuyerTest5\",\"taxId\":\"5555555555\",\""

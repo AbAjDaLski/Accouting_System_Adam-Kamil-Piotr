@@ -31,7 +31,8 @@ public class InFileDatabase implements Database {
   private List<Invoice> invoices = new ArrayList<>();
   private static Logger logger = LoggerFactory.getLogger(InFileDatabase.class);
   private static final String IOEXCEPTION_WHEN_OPENING_ID_FILE = "IOException when opening idFile ";
-  private static final String IOEXCEPTION_WHEN_OPENING_DATABASE_FILE = "IOException when opening databaseFile";
+  private static final String IOEXCEPTION_WHEN_OPENING_DATABASE_FILE = "IOException when opening"
+      + " databaseFile";
 
   @Autowired
   public InFileDatabase(@Value("database.file.databaseFilePath") String databaseFilePath,

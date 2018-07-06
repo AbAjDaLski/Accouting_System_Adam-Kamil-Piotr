@@ -21,7 +21,8 @@ import java.util.List;
 public class InvoiceService {
 
   public static final String INVOICE_TO_UPDATE_CANNOT_BE_NULL = "Invoice to update cannot be null";
-  public static final String INVOICE_TO_UPDATE_MUST_HAVE_A_VALID_ID = "Invoice to update must have a valid ID";
+  public static final String INVOICE_TO_UPDATE_MUST_HAVE_A_VALID_ID = "Invoice to update must have"
+      + " a valid ID";
   private static Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
 
   private final Database database;
