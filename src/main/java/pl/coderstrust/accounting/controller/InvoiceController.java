@@ -1,12 +1,11 @@
 package pl.coderstrust.accounting.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +35,6 @@ public class InvoiceController {
 
   private static Logger logger = LoggerFactory.getLogger(InvoiceController.class);
 
-  @Autowired
-  private InvoiceService invoiceService;
   private final InvoiceValidator invoiceValidator = new InvoiceValidator(
       new InvoiceEntryValidator(), new CompanyValidator());
   private InvoiceService invoiceService = new InvoiceService(new InMemoryDatabase(),
@@ -68,8 +65,6 @@ public class InvoiceController {
   public ResponseEntity<?> findSingleIvoiceById(
       @PathVariable(name = "id", required = true) int id) {
     logger.info("Received find by id invoices request");
-    return invoiceService
-        .findInvoices(new Invoice(id, null, null, null, null, null), null, null);
     Collection<Invoice> schearch = invoiceService.findInvoices(
         new Invoice(id, null, null, null, null, null), null, null);
     return schearch.isEmpty() ? ResponseEntity.notFound().build()
@@ -102,10 +97,8 @@ public class InvoiceController {
       @ApiResponse(code = 401, message = "Access unauthorized "),
       @ApiResponse(code = 403, message = "Access forbidden ")})
   @PostMapping
-  public int saveInvoice(@RequestBody Invoice invoice) {
-    logger.info("Received save invoice request");
-    return invoiceService.saveInvoice(invoice);
   public ResponseEntity<?> saveInvoice(@RequestBody Invoice invoice) {
+    logger.info("Received save invoice request");
     Collection<InvoiceValidationException> validationErrors = invoiceValidator
         .validateInvoiceForSave(invoice);
     if (validationErrors.isEmpty()) {
@@ -128,10 +121,6 @@ public class InvoiceController {
     invoiceService.removeInvoice(id);
   }
 
-  @PutMapping
-  public void updateInvoice(@RequestBody Invoice invoice) {
-    logger.info("Received update invoice request");
-    logger.info("Trying to update invoice");
   @ApiOperation(value = "Update invoice by id",
       notes = "Method update exist invoice")
   @ApiResponses(value = {
@@ -142,6 +131,7 @@ public class InvoiceController {
       @ApiResponse(code = 500, message = "Didn't update, invoice is not exist")})
   @PutMapping("/{id}")
   public void updateInvoice(@PathVariable int id, @RequestBody Invoice invoice) {
+    logger.info("Received update invoice request");
     invoiceService.updateInvoice(invoice);
   }
 }
