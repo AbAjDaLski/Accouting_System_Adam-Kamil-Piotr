@@ -54,22 +54,27 @@ public class InFileDatabase implements Database {
         invoice.getBuyer(), invoice.getSeller(), invoice.getEntries());
     try {
       FileInvoiceHelper.writeInvoiceToFile(invoiceToWrite, databaseFilePath);
-    } catch (IOException ieox) {
-      throw new RuntimeException(ieox);
+    } catch (IOException ioex) {
+      throw new RuntimeException(ioex);
     }
     return id;
   }
 
   @Override
   public void updateInvoice(Invoice invoice) {
+    try {
+      FileHelper.updateInvoiceInFile(databaseFilePath, invoice);
+    } catch (IOException ioex) {
+      throw new RuntimeException(ioex);
+    }
   }
 
   @Override
   public void removeInvoice(int id) {
     try {
       FileHelper.removeInvoiceFromFile(databaseFilePath, id);
-    } catch (IOException ieox) {
-      throw new RuntimeException(ieox);
+    } catch (IOException ioex) {
+      throw new RuntimeException(ioex);
     }
   }
 
@@ -78,8 +83,8 @@ public class InFileDatabase implements Database {
     Invoice invoiceTaken = null;
     try {
       invoiceTaken = FileHelper.getInvoiceFromFileById(databaseFilePath, id);
-    } catch (IOException ieox) {
-      throw new RuntimeException(ieox);
+    } catch (IOException ioex) {
+      throw new RuntimeException(ioex);
     }
     return invoiceTaken;
   }

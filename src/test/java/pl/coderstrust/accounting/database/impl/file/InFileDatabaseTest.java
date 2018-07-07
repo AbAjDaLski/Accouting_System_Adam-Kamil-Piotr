@@ -175,6 +175,31 @@ public class InFileDatabaseTest {
   }
 
   @Test
+  public void shouldUpdateInvoice() {
+    try {
+      //given
+      database = new InFileDatabase(DATABASE_FILE_PATH, ID_FILE_PATH);
+      Invoice invoice = InvoiceHelper.getSampleInvoiceWithId1();
+      String newIdentifier = "ABC";
+      LocalDate newDate = LocalDate.now();
+      Invoice updatedInvoice = new Invoice(1, newIdentifier, newDate,
+          InvoiceHelper.getSampleBuyerCompany(), InvoiceHelper.getSampleSellerCompany(),
+          InvoiceHelper.getSampleFourInvoiceEntriesList());
+
+      //when
+      database.saveInvoice(invoice);
+      database.updateInvoice(updatedInvoice);
+
+      //then
+      Invoice actual = database.get(1);
+      assertThat(actual.getIdentifier(), CoreMatchers.is(newIdentifier));
+      assertThat(actual.getIssuedDate(), CoreMatchers.is(newDate));
+    } finally {
+      cleanTestFiles();
+    }
+  }
+
+  @Test
   public void shouldRemoveInvoiceWithGivenIdWhenOneInvoiceInList() throws IOException {
     try {
       //given

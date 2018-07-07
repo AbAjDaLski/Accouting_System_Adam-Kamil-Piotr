@@ -22,6 +22,14 @@ public class FileHelper {
     }
   }
 
+  private static void closeBuffersAndRenameFile(File file, File tempFile,
+      BufferedWriter bufferedWriter, BufferedReader bufferedReader) throws IOException {
+    bufferedReader.close();
+    bufferedWriter.close();
+    file.delete();
+    tempFile.renameTo(file);
+  }
+
   public static void writeToFile(List<String> lines, String filePath) throws IOException {
     if (lines == null) {
       throw new IllegalArgumentException("Parameter lines may not be null");
@@ -64,6 +72,35 @@ public class FileHelper {
     }
   }
 
+  public static void updateInvoiceInFile(String filePath, Invoice invoice) throws IOException {
+    boolean invoiceUpdated = false;
+    ArrayList<String> lines = new ArrayList<>();
+    String updatedInvoice = JsonConverter.toJson(invoice);
+    File file = new File(filePath);
+    File tempFile = new File("tempFile.txt");
+    checkIfFileExistOrIsEmpty(file);
+    BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(tempFile));
+    BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+    String line;
+    while ((line = bufferedReader.readLine()) != null) {
+      if ((JsonConverter.fromJson(line).getId() == invoice.getId())) {
+        lines.add(updatedInvoice);
+        invoiceUpdated = true;
+        continue;
+      }
+      lines.add(line);
+    }
+    for (String listLine : lines) {
+      bufferedWriter.write(listLine);
+      bufferedWriter.newLine();
+    }
+    closeBuffersAndRenameFile(file, tempFile, bufferedWriter, bufferedReader);
+
+    if (!invoiceUpdated) {
+      throw new IllegalArgumentException("No invoice with given id in file");
+    }
+  }
+
   public static void removeInvoiceFromFile(String filePath, int id) throws IOException {
     boolean invoiceRemoved = false;
     File file = new File(filePath);
@@ -80,10 +117,7 @@ public class FileHelper {
       bufferedWriter.write(line);
       bufferedWriter.newLine();
     }
-    bufferedReader.close();
-    bufferedWriter.close();
-    tempFile.renameTo(file);
-    tempFile.delete();
+    closeBuffersAndRenameFile(file, tempFile, bufferedWriter, bufferedReader);
     if (!invoiceRemoved) {
       throw new IllegalArgumentException("No invoice with given id in file");
     }
