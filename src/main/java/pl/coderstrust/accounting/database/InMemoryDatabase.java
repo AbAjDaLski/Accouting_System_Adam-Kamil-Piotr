@@ -20,7 +20,7 @@ public class InMemoryDatabase implements Database {
   private final Map<Integer, Invoice> invoices = new HashMap<>();
   private int id = 0;
   private static Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
-  String wrongId = "The invoice with given ID does not exist: ";
+  private final static String WRONG_ID_MESSAGE = "The invoice with given ID does not exist: ";
 
   @Override
   public int saveInvoice(Invoice invoice) {
@@ -34,9 +34,9 @@ public class InMemoryDatabase implements Database {
   @Override
   public void updateInvoice(Invoice invoice) {
     if (!invoices.containsKey(invoice.getId())) {
-      logger.error(wrongId + invoice.getId());
+      logger.error(WRONG_ID_MESSAGE + invoice.getId());
       throw new IllegalArgumentException(
-          wrongId + invoice.getId());
+          WRONG_ID_MESSAGE + invoice.getId());
     }
     logger.info("Invoice updated");
     invoices.put(invoice.getId(), invoice);
