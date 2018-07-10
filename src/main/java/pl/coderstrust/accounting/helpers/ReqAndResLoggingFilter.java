@@ -93,7 +93,6 @@ public class ReqAndResLoggingFilter extends OncePerRequestFilter {
   }
 
   private void printLines(String... args) {
-
     for (String varArgs : args) {
       log.info(varArgs);
     }

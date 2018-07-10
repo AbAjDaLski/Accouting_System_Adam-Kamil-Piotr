@@ -20,8 +20,10 @@ import java.util.List;
 @Service
 public class InvoiceService {
 
-  public static final String INVOICE_TO_UPDATE_CANNOT_BE_NULL = "Invoice to update cannot be null";
-  public static final String INVOICE_TO_UPDATE_MUST_HAVE_A_VALID_ID = "Invoice to update must have"
+  public static final String INVOICE_TO_UPDATE_CANNOT_BE_NULL_MESSAGE = "Invoice to update cannot"
+      + " be null";
+  public static final String INVOICE_TO_UPDATE_MUST_HAVE_A_VALID_ID_MESSAGE = "Invoice to update"
+      + " must have"
       + " a valid ID";
   private static Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
 
@@ -41,12 +43,12 @@ public class InvoiceService {
 
   public void updateInvoice(Invoice invoice) {
     if (invoice == null) {
-      logger.error(INVOICE_TO_UPDATE_CANNOT_BE_NULL);
-      throw new IllegalArgumentException(INVOICE_TO_UPDATE_CANNOT_BE_NULL);
+      logger.error(INVOICE_TO_UPDATE_CANNOT_BE_NULL_MESSAGE);
+      throw new IllegalArgumentException(INVOICE_TO_UPDATE_CANNOT_BE_NULL_MESSAGE);
     }
     if (invoice.getId() == null) {
-      logger.error(INVOICE_TO_UPDATE_MUST_HAVE_A_VALID_ID);
-      throw new IllegalArgumentException(INVOICE_TO_UPDATE_MUST_HAVE_A_VALID_ID);
+      logger.error(INVOICE_TO_UPDATE_MUST_HAVE_A_VALID_ID_MESSAGE);
+      throw new IllegalArgumentException(INVOICE_TO_UPDATE_MUST_HAVE_A_VALID_ID_MESSAGE);
     }
     Invoice current = database.get(invoice.getId());
     if (current == null) {
