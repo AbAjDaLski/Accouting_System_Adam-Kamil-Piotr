@@ -25,6 +25,10 @@ public class InvoiceService {
   public static final String INVOICE_TO_UPDATE_MUST_HAVE_A_VALID_ID_MESSAGE = "Invoice to update"
       + " must have"
       + " a valid ID";
+  public static final String CANNOT_UPDATE_AN_INVOICE_WITH_GIVEN_ID_MESSAGE = "Cannot update: An"
+      + " invoice with given ID : ";
+  public static final String CANNOT_REMOVE_AN_INVOICE_WITH_GIVEN_ID_MESSAGE = "Cannot remove: An"
+      + " invoice with given ID : ";
   private static Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
 
   private final Database database;
@@ -52,9 +56,10 @@ public class InvoiceService {
     }
     Invoice current = database.get(invoice.getId());
     if (current == null) {
-      logger.error("Cannot update: An invoice with given ID : " + invoice.getId() + " doesn't exist");
+      logger.error(CANNOT_UPDATE_AN_INVOICE_WITH_GIVEN_ID_MESSAGE + invoice.getId() + " doesn't "
+          + "exist");
       throw new IllegalArgumentException(
-          "Cannot update: An invoice with given ID : " + invoice.getId() + " doesn't exist");
+          CANNOT_UPDATE_AN_INVOICE_WITH_GIVEN_ID_MESSAGE + invoice.getId() + " doesn't exist");
     } else {
       Invoice invoiceToUpdate = prepareInvoiceToUpdate(invoice, current);
       Collection<InvoiceValidationException> validationExceptions = invoiceValidator
@@ -90,9 +95,9 @@ public class InvoiceService {
     if (database.get(id) != null) {
       database.removeInvoice(id);
     } else {
-      logger.error("Cannot remove: An invoice with given ID : " + id + " doesn't exist");
+      logger.error(CANNOT_REMOVE_AN_INVOICE_WITH_GIVEN_ID_MESSAGE + id + " doesn't exist");
       throw new IllegalArgumentException(
-          "Cannot remove: An invoice with given ID : " + id + " doesn't exist");
+          CANNOT_REMOVE_AN_INVOICE_WITH_GIVEN_ID_MESSAGE + id + " doesn't exist");
     }
   }
 
