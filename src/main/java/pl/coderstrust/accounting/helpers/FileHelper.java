@@ -22,17 +22,10 @@ public class FileHelper {
     }
   }
 
-  private static void closeBuffer(BufferedWriter bufferedWriter, BufferedReader bufferedReader)
-      throws IOException {
-    bufferedReader.close();
-    bufferedWriter.close();
-  }
-
   private static void renameFile(File file, File tempFile) {
     file.delete();
     tempFile.renameTo(file);
   }
-
 
   public static void writeToFile(List<String> lines, String filePath) throws IOException {
     if (lines == null) {
@@ -98,7 +91,8 @@ public class FileHelper {
       bufferedWriter.write(listLine);
       bufferedWriter.newLine();
     }
-    closeBuffer(bufferedWriter, bufferedReader);
+    bufferedReader.close();
+    bufferedWriter.close();
     renameFile(file, tempFile);
     if (!invoiceUpdated) {
       throw new IllegalArgumentException("No invoice with given id in file");
@@ -121,7 +115,8 @@ public class FileHelper {
       bufferedWriter.write(line);
       bufferedWriter.newLine();
     }
-    closeBuffer(bufferedWriter, bufferedReader);
+    bufferedReader.close();
+    bufferedWriter.close();
     renameFile(file, tempFile);
     if (!invoiceRemoved) {
       throw new IllegalArgumentException("No invoice with given id in file");
