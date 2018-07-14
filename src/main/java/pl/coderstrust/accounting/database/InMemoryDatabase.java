@@ -20,7 +20,7 @@ public class InMemoryDatabase implements Database {
   private final Map<Integer, Invoice> invoices = new HashMap<>();
   private int id = 0;
   private static Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
-  private final static String WRONG_ID_MESSAGE = "The invoice with given ID does not exist: ";
+  private static final  String WRONG_ID_MESSAGE = "The invoice with given ID does not exist: ";
 
   @Override
   public int saveInvoice(Invoice invoice) {

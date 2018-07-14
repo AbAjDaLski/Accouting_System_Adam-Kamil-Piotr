@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class InvoiceEntryValidator {
 
-  public static final String EXPECTED_NOT_EMPTY_DESCRIPTION_ = "Expected not empty description ";
+  public static final String EXPECTED_NOT_EMPTY_DESCRIPTION = "Expected not empty description ";
   public static final String EXPECTED_NOT_EMPTY_PRICE = "Expected not empty price";
   public static final String EXPECTED_NOT_EMPTY_VAT = "Expected not empty vat";
   private static Logger logger = LoggerFactory.getLogger(InvoiceEntryValidator.class);
@@ -20,8 +20,8 @@ public class InvoiceEntryValidator {
   public Collection<String> validate(InvoiceEntry invoiceEntry) {
     List<String> validationExceptions = new LinkedList<>();
     if (invoiceEntry.getDescription() == null) {
-      logger.error(EXPECTED_NOT_EMPTY_DESCRIPTION_);
-      validationExceptions.add(EXPECTED_NOT_EMPTY_DESCRIPTION_);
+      logger.error(EXPECTED_NOT_EMPTY_DESCRIPTION);
+      validationExceptions.add(EXPECTED_NOT_EMPTY_DESCRIPTION);
     }
 
     if (invoiceEntry.getPrice() == null) {

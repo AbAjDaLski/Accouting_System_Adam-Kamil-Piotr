@@ -23,8 +23,7 @@ public class InvoiceService {
   public static final String INVOICE_TO_UPDATE_CANNOT_BE_NULL_MESSAGE = "Invoice to update cannot"
       + " be null";
   public static final String INVOICE_TO_UPDATE_MUST_HAVE_A_VALID_ID_MESSAGE = "Invoice to update"
-      + " must have"
-      + " a valid ID";
+      + " must have a valid ID";
   public static final String CANNOT_UPDATE_AN_INVOICE_WITH_GIVEN_ID_MESSAGE = "Cannot update: An"
       + " invoice with given ID : ";
   public static final String CANNOT_REMOVE_AN_INVOICE_WITH_GIVEN_ID_MESSAGE = "Cannot remove: An"
