@@ -3,6 +3,9 @@ package pl.coderstrust.accounting.helpers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pl.coderstrust.accounting.database.impl.file.InFileDatabase;
 import pl.coderstrust.accounting.model.Invoice;
 
 import java.io.IOException;
@@ -14,6 +17,7 @@ import java.util.List;
 public class FileInvoiceHelper {
 
   private static ObjectMapper mapper = new ObjectMapper();
+  private static Logger logger = LoggerFactory.getLogger(InFileDatabase.class);
 
   static {
     mapper.registerModule(new JavaTimeModule());
@@ -40,6 +44,7 @@ public class FileInvoiceHelper {
     List<String> lines = null;
     lines = FileHelper.readFromFile(filePath);
     if (lines.size() > 1) {
+      logger.error("File can't included more than 1 id");
       throw new IllegalStateException(
           "File can't include more than 1 id");
     }

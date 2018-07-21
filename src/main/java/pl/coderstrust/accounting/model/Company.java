@@ -62,4 +62,11 @@ public class Company {
         && Objects.equals(postalCode, company.postalCode)
         && Objects.equals(location, company.location);
   }
+
+  @Override
+  public String toString() {
+    return "Company{" + "name='" + name + '\'' + ", taxId='" + taxId + '\'' + ", streetAndNumber='"
+        + streetAndNumber + '\'' + ", postalCode='" + postalCode + '\'' + ", location='" + location
+        + '\'' + '}';
+  }
 }

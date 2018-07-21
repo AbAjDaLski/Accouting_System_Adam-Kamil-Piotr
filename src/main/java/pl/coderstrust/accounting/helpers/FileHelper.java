@@ -1,7 +1,11 @@
 package pl.coderstrust.accounting.helpers;
 
+
 import pl.coderstrust.accounting.model.Invoice;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pl.coderstrust.accounting.database.InMemoryDatabase;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,6 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileHelper {
+  
+  private static Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
+  private static final String FILE_PATH_CANNOT_BE_NULL_MESSAGE = "File path cannot be null";
+  private static final String LINE_CANNOT_BE_NULL_MESSAGE = "Line cannot be null";
+
 
   public static void checkIfFileExistOrIsEmpty(File file) {
     if (!file.exists()) {
@@ -29,10 +38,12 @@ public class FileHelper {
 
   public static void writeToFile(List<String> lines, String filePath) throws IOException {
     if (lines == null) {
-      throw new IllegalArgumentException("Parameter lines may not be null");
+      logger.error(LINE_CANNOT_BE_NULL_MESSAGE);
+      throw new IllegalArgumentException(LINE_CANNOT_BE_NULL_MESSAGE);
     }
     if (filePath == null) {
-      throw new IllegalArgumentException("Parameter filePath may not be null");
+      logger.error(FILE_PATH_CANNOT_BE_NULL_MESSAGE);
+      throw new IllegalArgumentException(FILE_PATH_CANNOT_BE_NULL_MESSAGE);
     }
     try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath))) {
       for (String line : lines) {
@@ -58,10 +69,12 @@ public class FileHelper {
   public static void appendToFile(String line, String filePath)
       throws IOException {
     if (line == null) {
-      throw new IllegalArgumentException("Parameter line may not be null");
+      logger.error(LINE_CANNOT_BE_NULL_MESSAGE);
+      throw new IllegalArgumentException(LINE_CANNOT_BE_NULL_MESSAGE);
     }
     if (filePath == null) {
-      throw new IllegalArgumentException("Parameter filePath may not be null");
+      logger.error(FILE_PATH_CANNOT_BE_NULL_MESSAGE);
+      throw new IllegalArgumentException(FILE_PATH_CANNOT_BE_NULL_MESSAGE);
     }
     try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath, true))) {
       bufferedWriter.append(line);

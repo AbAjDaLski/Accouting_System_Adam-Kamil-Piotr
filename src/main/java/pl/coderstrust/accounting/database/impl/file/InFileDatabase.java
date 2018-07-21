@@ -1,5 +1,7 @@
 package pl.coderstrust.accounting.database.impl.file;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -27,8 +29,12 @@ public class InFileDatabase implements Database {
   private String idFilePath;
   private int id;
   private Set<Invoice> searchResult = new HashSet<>();
-
   private List<Invoice> invoices = new ArrayList<>();
+  private static Logger logger = LoggerFactory.getLogger(InFileDatabase.class);
+  private static final String EXCEPTION_WHEN_OPENING_ID_FILE_MESSAGE = "IOException when opening"
+      + " idFile ";
+  private static final String EXCEPTION_WHEN_OPENING_DATABASE_FILE_MESSAGE = "IOException when"
+      + " opening databaseFile";
 
   @Autowired
   public InFileDatabase(@Value("database.file.databaseFilePath") String databaseFilePath,
@@ -48,15 +54,18 @@ public class InFileDatabase implements Database {
     try {
       id = FileInvoiceHelper.getAndIncrementLastId(idFilePath);
     } catch (IOException ioex) {
-      throw new RuntimeException("IOException when opening idFile " + idFilePath, ioex);
+      logger.error(EXCEPTION_WHEN_OPENING_ID_FILE_MESSAGE + idFilePath, ioex);
+      throw new RuntimeException(EXCEPTION_WHEN_OPENING_ID_FILE_MESSAGE + idFilePath, ioex);
     }
     Invoice invoiceToWrite = new Invoice(id, invoice.getIdentifier(), invoice.getIssuedDate(),
         invoice.getBuyer(), invoice.getSeller(), invoice.getEntries());
     try {
       FileInvoiceHelper.writeInvoiceToFile(invoiceToWrite, databaseFilePath);
-    } catch (IOException ioex) {
-      throw new RuntimeException(ioex);
+    } catch (IOException ieox) {
+      logger.error(EXCEPTION_WHEN_OPENING_DATABASE_FILE_MESSAGE + databaseFilePath + ieox);
+      throw new RuntimeException(ieox);
     }
+    logger.info("Invoice saved with id = " + id);
     return id;
   }
 
@@ -96,6 +105,8 @@ public class InFileDatabase implements Database {
     try {
       searchResult = new HashSet(FileInvoiceHelper.readInvoicesFromFile(databaseFilePath));
     } catch (IOException ioex) {
+
+      logger.error(EXCEPTION_WHEN_OPENING_DATABASE_FILE_MESSAGE + databaseFilePath + ioex);
       ioex.printStackTrace();
     }
     if (searchResult != null) {
@@ -122,6 +133,7 @@ public class InFileDatabase implements Database {
         }
       }
     }
+    logger.info("Invoice found");
     return searchResult;
   }
 
@@ -176,8 +188,10 @@ public class InFileDatabase implements Database {
     try {
       invoices = FileInvoiceHelper.readInvoicesFromFile(databaseFilePath);
     } catch (IOException ioex) {
+      logger.error(EXCEPTION_WHEN_OPENING_DATABASE_FILE_MESSAGE + databaseFilePath + ioex);
       ioex.printStackTrace();
     }
+    logger.info("Invoices found");
     return invoices;
   }
 }
