@@ -46,7 +46,7 @@ public class FileInvoiceHelper {
     if (lines.size() > 1) {
       logger.error("File can't included more than 1 id");
       throw new IllegalStateException(
-          "File can't included more than 1 id");
+          "File can't include more than 1 id");
     }
     if (lines.isEmpty()) {
       FileHelper.writeToFile(Collections.singletonList("1"), filePath);

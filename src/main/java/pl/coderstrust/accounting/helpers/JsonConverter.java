@@ -9,23 +9,20 @@ import java.io.IOException;
 
 public class JsonConverter {
 
-  public static String toJson(Invoice invoice) throws IOException {
+  private static ObjectMapper mapper = new ObjectMapper();
 
-    ObjectMapper mapper = new ObjectMapper();
-
+  static {
     mapper.registerModule(new JavaTimeModule());
     mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+  }
+
+  public static String toJson(Invoice invoice) throws IOException {
 
     String json = mapper.writeValueAsString(invoice);
     return json;
   }
 
   public static Invoice fromJson(String json) throws IOException {
-
-    ObjectMapper mapper = new ObjectMapper();
-
-    mapper.registerModule(new JavaTimeModule());
-    mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
     Invoice invoiceFromJson = mapper.readValue(json, Invoice.class);
     return invoiceFromJson;

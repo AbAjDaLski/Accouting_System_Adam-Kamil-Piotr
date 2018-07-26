@@ -34,7 +34,7 @@ public class InvoiceService {
   private final InvoiceValidator invoiceValidator;
 
   @Autowired
-  public InvoiceService(@Qualifier("inMemoryDatabase") Database database,
+  public InvoiceService(@Qualifier("inFileDatabase") Database database,
       InvoiceValidator invoiceValidator) {
     this.database = database;
     this.invoiceValidator = invoiceValidator;

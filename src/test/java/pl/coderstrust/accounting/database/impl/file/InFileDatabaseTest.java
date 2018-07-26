@@ -1,5 +1,6 @@
 package pl.coderstrust.accounting.database.impl.file;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -10,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import pl.coderstrust.accounting.helpers.FileHelper;
@@ -21,6 +23,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Collection;
+import java.util.List;
 
 @RunWith(JUnitParamsRunner.class)
 public class InFileDatabaseTest {
@@ -104,7 +107,6 @@ public class InFileDatabaseTest {
 
       //then
       assertNotNull(FileHelper.readFromFile(DATABASE_FILE_PATH).get(0));
-      assertNotNull(FileHelper.readFromFile(DATABASE_FILE_PATH).get(0));
     } finally {
       cleanTestFiles();
     }
@@ -143,9 +145,174 @@ public class InFileDatabaseTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void shouldThrowExceptionIfIdFilePathhIsEmpty() {
+  public void shouldThrowExceptionIfIdFilePathIsEmpty() {
     //given
     database = new InFileDatabase(DATABASE_FILE_PATH, "");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldThrowAnExceptionIfNoInvoiceWithGivenIdToRemove() throws IOException {
+    try {
+      //given
+      database = new InFileDatabase(DATABASE_FILE_PATH, ID_FILE_PATH);
+      Invoice invoice1 = InvoiceHelper.getSampleInvoiceWithId1();
+
+      //when
+      database.saveInvoice(invoice1);
+      database.removeInvoice(5);
+    } finally {
+      cleanTestFiles();
+    }
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldThrowAnExceptionIfNoInvoiceToRemove() throws IOException {
+    //given
+    database = new InFileDatabase(DATABASE_FILE_PATH, ID_FILE_PATH);
+
+    //when
+    database.removeInvoice(5);
+  }
+
+  @Test
+  public void shouldUpdateInvoice() {
+    try {
+      //given
+      database = new InFileDatabase(DATABASE_FILE_PATH, ID_FILE_PATH);
+      Invoice invoice = InvoiceHelper.getSampleInvoiceWithId1();
+      String newIdentifier = "ABC";
+      LocalDate newDate = LocalDate.now();
+      Invoice updatedInvoice = new Invoice(1, newIdentifier, newDate,
+          InvoiceHelper.getSampleBuyerCompany(), InvoiceHelper.getSampleSellerCompany(),
+          InvoiceHelper.getSampleFourInvoiceEntriesList());
+
+      //when
+      database.saveInvoice(invoice);
+      database.updateInvoice(updatedInvoice);
+
+      //then
+      Invoice actual = database.get(1);
+      assertThat(actual.getIdentifier(), CoreMatchers.is(newIdentifier));
+      assertThat(actual.getIssuedDate(), CoreMatchers.is(newDate));
+    } finally {
+      cleanTestFiles();
+    }
+  }
+
+  @Test
+  public void shouldRemoveInvoiceWithGivenIdWhenOneInvoiceInList() throws IOException {
+    try {
+      //given
+      database = new InFileDatabase(DATABASE_FILE_PATH, ID_FILE_PATH);
+      Invoice invoice1 = InvoiceHelper.getSampleInvoiceWithId1();
+
+      //when
+      database.saveInvoice(invoice1);
+      database.removeInvoice(1);
+
+      //then
+      assertTrue(FileHelper.readFromFile(DATABASE_FILE_PATH).isEmpty());
+    } finally {
+      cleanTestFiles();
+    }
+  }
+
+  @Test
+  public void shouldRemoveInvoiceWithGivenIdWhenManyInvoicesInList() throws IOException {
+    try {
+      //given
+      database = new InFileDatabase(DATABASE_FILE_PATH, ID_FILE_PATH);
+      Invoice invoice1 = InvoiceHelper.getSampleInvoiceWithId1();
+      Invoice invoice2 = InvoiceHelper.getSampleInvoiceWithId2();
+      Invoice invoice3 = InvoiceHelper.getSampleInvoiceWithId3();
+
+      //when
+      database.saveInvoice(invoice1);
+      database.saveInvoice(invoice2);
+      database.saveInvoice(invoice3);
+      database.removeInvoice(1);
+
+      //then
+      List afterRemoveLines = FileHelper.readFromFile(DATABASE_FILE_PATH);
+      String actual1 = afterRemoveLines.get(0).toString();
+      String expected1 = "{\"id\":2"
+          + ",\"identifier\":\"TestIdentifier2\""
+          + ",\"issuedDate\":\"" + LocalDate.now() + "\""
+          + ",\"buyer\":{\"name\":\"CompanyBuyerTest2\""
+          + ",\"taxId\":\"2222222222\""
+          + ",\"streetAndNumber\":\"Test Buyer Street 2\""
+          + ",\"postalCode\":\"22-222\",\"location\":\"TestLocationBuyer2\"}"
+          + ",\"seller\":{\"name\":\"CompanySellerTest2\",\"taxId\":\"2222222222\""
+          + ",\"streetAndNumber\":\"Test Seller Street 2\",\"postalCode\":\"22-222\""
+          + ",\"location\":\"TestLocationSeller2\"},\"entries\":[{\"description\":\"Test Entry #2\""
+          + ",\"price\":10,\"vat\":8}]}";
+      assertThat(actual1, is(equalTo(expected1)));
+      String actual2 = afterRemoveLines.get(1).toString();
+      String expected2 = "{\"id\":3"
+          + ",\"identifier\":\"TestIdentifier3\""
+          + ",\"issuedDate\":\"" + LocalDate.now() + "\""
+          + ",\"buyer\":{\"name\":\"CompanyBuyerTest3\""
+          + ",\"taxId\":\"3333333333\""
+          + ",\"streetAndNumber\":\"Test Buyer Street 3\""
+          + ",\"postalCode\":\"33-333\",\"location\":\"TestLocationBuyer3\"}"
+          + ",\"seller\":{\"name\":\"CompanySellerTest3\",\"taxId\":\"3333333333\""
+          + ",\"streetAndNumber\":\"Test Seller Street 3\",\"postalCode\":\"33-333\""
+          + ",\"location\":\"TestLocationSeller3\"},\"entries\":[{\"description\":\"Test Entry #3\""
+          + ",\"price\":10,\"vat\":8}]}";
+      assertThat(actual2, is(equalTo(expected2)));
+    } finally {
+      cleanTestFiles();
+    }
+  }
+
+  @Test
+  public void shouldGetInvoiceById() throws IOException {
+    try {
+      //given
+      database = new InFileDatabase(DATABASE_FILE_PATH, ID_FILE_PATH);
+      Invoice invoice1 = InvoiceHelper.getSampleInvoiceWithId1();
+      Invoice invoice2 = InvoiceHelper.getSampleInvoiceWithId2();
+      Invoice invoice3 = InvoiceHelper.getSampleInvoiceWithId3();
+
+      //when
+      database.saveInvoice(invoice1);
+      database.saveInvoice(invoice2);
+      database.saveInvoice(invoice3);
+
+      //then
+      Invoice actual1 = invoice1;
+      Invoice expected1 = database.get(1);
+      invoicesAreIdentical(actual1, expected1);
+      Invoice actual2 = invoice3;
+      Invoice expected2 = database.get(3);
+      invoicesAreIdentical(actual2, expected2);
+    } finally {
+      cleanTestFiles();
+    }
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldThrowAnExceptionIfNoInvoiceWithGivenIdToGet() throws IOException {
+    try {
+      //given
+      database = new InFileDatabase(DATABASE_FILE_PATH, ID_FILE_PATH);
+      Invoice invoice1 = InvoiceHelper.getSampleInvoiceWithId1();
+
+      //when
+      database.saveInvoice(invoice1);
+      database.get(5);
+    } finally {
+      cleanTestFiles();
+    }
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldThrowAnExceptionIfNoInvoiceToGet() throws IOException {
+    //given
+    database = new InFileDatabase(DATABASE_FILE_PATH, ID_FILE_PATH);
+
+    //when
+    database.get(5);
   }
 
   @Test
@@ -186,7 +353,7 @@ public class InFileDatabaseTest {
   }
 
   @Test
-  @Parameters(method = "giverParameters")
+  @Parameters(method = "giveParameters")
   public void shouldFindInvoicesInFileByBuyerOrSeller(Invoice searchParams) {
     try {
       //given
@@ -209,7 +376,7 @@ public class InFileDatabaseTest {
     }
   }
 
-  private Object[] giverParameters() {
+  private Object[] giveParameters() {
     Invoice sample1 = InvoiceHelper.getSampleInvoiceWithId7();
     Invoice sample2 = InvoiceHelper.getSampleInvoiceWithId8_WithSameBuyerWhatId7();
     Invoice sample3 = InvoiceHelper.getSampleInvoiceWithId9_WithSameSellerWhatId8();
@@ -310,5 +477,16 @@ public class InFileDatabaseTest {
     } finally {
       cleanTestFiles();
     }
+  }
+
+  public static void invoicesAreIdentical(Invoice invoice, Invoice invoiceToCompare) {
+    MatcherAssert.assertThat(invoice.getId(), CoreMatchers.is(invoiceToCompare.getId()));
+    MatcherAssert
+        .assertThat(invoice.getIdentifier(), CoreMatchers.is(invoiceToCompare.getIdentifier()));
+    MatcherAssert
+        .assertThat(invoice.getIssuedDate(), CoreMatchers.is(invoiceToCompare.getIssuedDate()));
+    MatcherAssert.assertThat(invoice.getBuyer(), CoreMatchers.is(invoiceToCompare.getBuyer()));
+    MatcherAssert.assertThat(invoice.getSeller(), CoreMatchers.is(invoiceToCompare.getSeller()));
+    assertTrue(invoice.getEntries().equals(invoiceToCompare.getEntries()));
   }
 }

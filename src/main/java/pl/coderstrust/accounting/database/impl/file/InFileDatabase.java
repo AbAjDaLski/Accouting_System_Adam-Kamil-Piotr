@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import pl.coderstrust.accounting.database.Database;
+import pl.coderstrust.accounting.helpers.FileHelper;
 import pl.coderstrust.accounting.helpers.FileInvoiceHelper;
 import pl.coderstrust.accounting.model.Company;
 import pl.coderstrust.accounting.model.Invoice;
@@ -70,15 +71,31 @@ public class InFileDatabase implements Database {
 
   @Override
   public void updateInvoice(Invoice invoice) {
+    try {
+      FileHelper.updateInvoiceInFile(databaseFilePath, invoice);
+    } catch (IOException ioex) {
+      throw new RuntimeException(ioex);
+    }
   }
 
   @Override
   public void removeInvoice(int id) {
+    try {
+      FileHelper.removeInvoiceFromFile(databaseFilePath, id);
+    } catch (IOException ioex) {
+      throw new RuntimeException(ioex);
+    }
   }
 
   @Override
   public Invoice get(int id) {
-    return null;
+    Invoice invoiceTaken = null;
+    try {
+      invoiceTaken = FileHelper.getInvoiceFromFileById(databaseFilePath, id);
+    } catch (IOException ioex) {
+      throw new RuntimeException(ioex);
+    }
+    return invoiceTaken;
   }
 
   @Override
