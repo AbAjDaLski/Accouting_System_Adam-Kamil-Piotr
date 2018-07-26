@@ -35,6 +35,7 @@ public class InvoiceController {
 
   private static Logger logger = LoggerFactory.getLogger(InvoiceController.class);
 
+  // TODO should use dependency injection (pass through constructor) - implement that in entire project
   private final InvoiceValidator invoiceValidator = new InvoiceValidator(
       new InvoiceEntryValidator(), new CompanyValidator());
   private InvoiceService invoiceService = new InvoiceService(new InMemoryDatabase(),
@@ -42,7 +43,7 @@ public class InvoiceController {
 
   @ApiOperation(value = "Find all invoices",
       notes = "Method returns list of all invoices")
-  @ApiResponses(value = {
+  @ApiResponses(value = { // TODO redefining standard codes is not needed - I would remove that.
       @ApiResponse(code = 200, message = "All invoices"),
       @ApiResponse(code = 401, message = "Access unauthorized "),
       @ApiResponse(code = 403, message = "Access forbidden "),
@@ -101,6 +102,7 @@ public class InvoiceController {
     logger.info("Received save invoice request");
     Collection<InvoiceValidationException> validationErrors = invoiceValidator
         .validateInvoiceForSave(invoice);
+    // TODO it's better to do it opposite way - if errors return error otherwise process further
     if (validationErrors.isEmpty()) {
       return ResponseEntity.ok(invoiceService.saveInvoice(invoice));
     }
@@ -118,7 +120,7 @@ public class InvoiceController {
   @DeleteMapping
   public void removeInvoice(@RequestBody int id) {
     logger.info("Received remove invoice request");
-    invoiceService.removeInvoice(id);
+    invoiceService.removeInvoice(id); // TODO what if provided id does not exists?
   }
 
   @ApiOperation(value = "Update invoice by id",
@@ -131,6 +133,7 @@ public class InvoiceController {
       @ApiResponse(code = 500, message = "Didn't update, invoice is not exist")})
   @PutMapping("/{id}")
   public void updateInvoice(@PathVariable int id, @RequestBody Invoice invoice) {
+    // TODO why don't you check passed invoce? What if provided id does not exists?
     logger.info("Received update invoice request");
     invoiceService.updateInvoice(invoice);
   }

@@ -13,6 +13,7 @@ public interface Database {
 
   void removeInvoice(int id);
 
+  // TODO it's good to return optional<invoice> in such case - it will be empty if id does not exists
   Invoice get(int id);
 
   Collection<Invoice> find(Invoice searchParams, LocalDate issuedDateFrom, LocalDate issuedDateTo);

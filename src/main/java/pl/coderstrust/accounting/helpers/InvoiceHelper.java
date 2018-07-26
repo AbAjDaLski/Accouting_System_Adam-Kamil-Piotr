@@ -21,6 +21,7 @@ public class InvoiceHelper {
     return new Invoice("TestIdentifier", LocalDate.now(), buyer, seller, entries);
   }
 
+  // TODO this class should be in tests not in main code.
   public static Invoice getSampleInvoiceWithIncorrectId() {
     Company buyer = new Company("CompanyBuyerTest-1", "1111111111", "Test Buyer Street -1",
         "11111",

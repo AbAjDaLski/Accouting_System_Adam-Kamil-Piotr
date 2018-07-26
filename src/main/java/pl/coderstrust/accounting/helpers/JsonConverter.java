@@ -17,7 +17,7 @@ public class JsonConverter {
   }
 
   public static String toJson(Invoice invoice) throws IOException {
-
+    // TODO inline those variables - those are not needed
     String json = mapper.writeValueAsString(invoice);
     return json;
   }

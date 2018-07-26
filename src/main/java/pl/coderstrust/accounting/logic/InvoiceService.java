@@ -19,7 +19,7 @@ import java.util.List;
 
 @Service
 public class InvoiceService {
-
+  // TODO it's better to create single file Messages and keep there all messages
   public static final String INVOICE_TO_UPDATE_CANNOT_BE_NULL_MESSAGE = "Invoice to update cannot"
       + " be null";
   public static final String INVOICE_TO_UPDATE_MUST_HAVE_A_VALID_ID_MESSAGE = "Invoice to update"
@@ -54,6 +54,7 @@ public class InvoiceService {
       throw new IllegalArgumentException(INVOICE_TO_UPDATE_MUST_HAVE_A_VALID_ID_MESSAGE);
     }
     Invoice current = database.get(invoice.getId());
+    // TODO - all those checks should be done in controller - you need to be able to return message to client
     if (current == null) {
       logger.error(CANNOT_UPDATE_AN_INVOICE_WITH_GIVEN_ID_MESSAGE + invoice.getId() + " doesn't "
           + "exist");
