@@ -33,7 +33,12 @@ import java.util.Collection;
 @Api(value = "/{invoices}", description = "Operations on invoices")
 public class InvoiceController {
 
+  private InvoiceService invoiceService;
   private static Logger logger = LoggerFactory.getLogger(InvoiceController.class);
+
+  public InvoiceController(InvoiceService invoiceService) {
+    this.invoiceService = invoiceService;
+  }
 
   private final InvoiceValidator invoiceValidator = new InvoiceValidator(
       new InvoiceEntryValidator(), new CompanyValidator());
@@ -62,8 +67,14 @@ public class InvoiceController {
       @ApiResponse(code = 400, message = "Bad format date, use number"),
       @ApiResponse(code = 404, message = "Invoice is not exist")})
   @GetMapping("/{id}")
-  public ResponseEntity<?> findSingleIvoiceById(
-      @PathVariable(name = "id", required = true) int id) {
+  public Invoice findSingleInvoice(
+      public ResponseEntity<?> findSingleIvoiceById(
+      @PathVariable(name="id", required =true)
+
+  int id)
+
+  {
+    return invoiceService.findById(id);
     logger.info("Received find by id invoices request");
     Collection<Invoice> schearch = invoiceService.findInvoices(
         new Invoice(id, null, null, null, null, null), null, null);
@@ -121,17 +132,20 @@ public class InvoiceController {
     invoiceService.removeInvoice(id);
   }
 
-  @ApiOperation(value = "Update invoice by id",
-      notes = "Method update exist invoice")
-  @ApiResponses(value = {
-      @ApiResponse(code = 200, message = "Updated invoice"),
-      @ApiResponse(code = 401, message = "Access unauthorized "),
-      @ApiResponse(code = 403, message = "Access forbidden "),
-      @ApiResponse(code = 400, message = "insert bad format, use format YYYY-MM-DD"),
-      @ApiResponse(code = 500, message = "Didn't update, invoice is not exist")})
-  @PutMapping("/{id}")
-  public void updateInvoice(@PathVariable int id, @RequestBody Invoice invoice) {
-    logger.info("Received update invoice request");
-    invoiceService.updateInvoice(invoice);
+  @PutMapping
+  public int updateInvoice(@RequestBody Invoice invoice) {
+    return invoiceService.updateInvoice(invoice);
+    @ApiOperation(value = "Update invoice by id",
+        notes = "Method update exist invoice")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Updated invoice"),
+        @ApiResponse(code = 401, message = "Access unauthorized "),
+        @ApiResponse(code = 403, message = "Access forbidden "),
+        @ApiResponse(code = 400, message = "insert bad format, use format YYYY-MM-DD"),
+        @ApiResponse(code = 500, message = "Didn't update, invoice is not exist")})
+    @PutMapping("/{id}")
+    public void updateInvoice ( @PathVariable int id, @RequestBody Invoice invoice){
+      logger.info("Received update invoice request");
+      invoiceService.updateInvoice(invoice);
+    }
   }
-}

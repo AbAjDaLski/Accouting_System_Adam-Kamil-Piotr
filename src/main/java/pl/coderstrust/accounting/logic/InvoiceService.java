@@ -2,8 +2,6 @@ package pl.coderstrust.accounting.logic;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.database.InMemoryDatabase;
@@ -33,8 +31,7 @@ public class InvoiceService {
   private final Database database;
   private final InvoiceValidator invoiceValidator;
 
-  @Autowired
-  public InvoiceService(@Qualifier("inFileDatabase") Database database,
+  public InvoiceService(Database database,
       InvoiceValidator invoiceValidator) {
     this.database = database;
     this.invoiceValidator = invoiceValidator;
@@ -44,7 +41,7 @@ public class InvoiceService {
     return database.saveInvoice(invoice);
   }
 
-  public void updateInvoice(Invoice invoice) {
+  public int updateInvoice(Invoice invoice) {
     if (invoice == null) {
       logger.error(INVOICE_TO_UPDATE_CANNOT_BE_NULL_MESSAGE);
       throw new IllegalArgumentException(INVOICE_TO_UPDATE_CANNOT_BE_NULL_MESSAGE);
@@ -75,6 +72,7 @@ public class InvoiceService {
         throw new IllegalArgumentException(sb.toString());
       }
     }
+    return invoice.getId();
   }
 
   private Invoice prepareInvoiceToUpdate(Invoice invoice, Invoice current) {
@@ -98,6 +96,10 @@ public class InvoiceService {
       throw new IllegalArgumentException(
           CANNOT_REMOVE_AN_INVOICE_WITH_GIVEN_ID_MESSAGE + id + " doesn't exist");
     }
+  }
+
+  public Invoice findById(int id) {
+    return database.get(id);
   }
 
   public Collection<Invoice> findInvoices(Invoice searchParams, LocalDate issuedDateFrom,

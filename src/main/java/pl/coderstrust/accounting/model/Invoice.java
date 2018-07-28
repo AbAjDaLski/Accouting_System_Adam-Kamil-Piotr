@@ -8,10 +8,29 @@ import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @ApiModel(value = "InvoiceModel", description = "Sample model for the Invoice")
+@Entity
 public class Invoice {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+  private String identifier;
+  private LocalDate issuedDate;
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  private Company buyer;
+  @ManyToOne(cascade = CascadeType.ALL)
+  private Company seller;
+  @OneToMany(cascade = CascadeType.ALL)
   @ApiModelProperty(value = "id invoice", example = "2")
   private final Integer id;
   @ApiModelProperty(value = "Invoice of number FV/RRRR/MM/DD", example = "FV/2018/05/23/1")
@@ -21,6 +40,9 @@ public class Invoice {
   private final Company buyer;
   private final Company seller;
   private List<InvoiceEntry> entries;
+
+  public Invoice() {
+  }
 
   @JsonCreator
   public Invoice(@JsonProperty("id") Integer id, @JsonProperty("identifier") String identifier,

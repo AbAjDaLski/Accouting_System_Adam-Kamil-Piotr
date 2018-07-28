@@ -4,7 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Arrays;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
+@Entity
 public enum Vat {
   REGULAR(23), REDUCED1(8), REDUCED2(5), ZERO(0);
 
@@ -12,6 +16,8 @@ public enum Vat {
     this.rate = rate;
   }
 
+  @Id
+  @GeneratedValue
   private final int rate;
 
   @JsonCreator

@@ -5,14 +5,26 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
 public class Company {
 
-  private final String name;
-  private final String taxId;
-  private final String streetAndNumber;
-  private final String postalCode;
-  private final String location;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
+
+  private String name;
+  private String taxId;
+  private String streetAndNumber;
+  private String postalCode;
+  private String location;
+
+  public Company() {
+  }
 
   @JsonCreator
   public Company(@JsonProperty("name") String name, @JsonProperty("taxId") String taxId,

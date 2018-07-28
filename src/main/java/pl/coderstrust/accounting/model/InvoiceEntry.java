@@ -5,12 +5,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
 public class InvoiceEntry {
 
-  private final String description;
-  private final BigDecimal price;
-  private final Vat vat;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
+
+  private String description;
+  private BigDecimal price;
+  private Vat vat;
+
+  public InvoiceEntry() {
+  }
 
   @JsonCreator
   public InvoiceEntry(@JsonProperty("description") String description,
