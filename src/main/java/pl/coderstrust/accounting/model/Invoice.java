@@ -2,8 +2,6 @@ package pl.coderstrust.accounting.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,14 +14,16 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-@ApiModel(value = "InvoiceModel", description = "Sample model for the Invoice")
 @Entity
 public class Invoice {
 
+  //  @ApiModelProperty(value = "id invoice", example = "2")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+  //  @ApiModelProperty(value = "Invoice of number FV/RRRR/MM/DD", example = "FV/2018/05/23/1")
   private String identifier;
+  //  @ApiModelProperty(value = "Format date RRRR-MM-DD")
   private LocalDate issuedDate;
 
   @ManyToOne(cascade = CascadeType.ALL)
@@ -31,14 +31,6 @@ public class Invoice {
   @ManyToOne(cascade = CascadeType.ALL)
   private Company seller;
   @OneToMany(cascade = CascadeType.ALL)
-  @ApiModelProperty(value = "id invoice", example = "2")
-  private final Integer id;
-  @ApiModelProperty(value = "Invoice of number FV/RRRR/MM/DD", example = "FV/2018/05/23/1")
-  private final String identifier;
-  @ApiModelProperty(value = "Format date RRRR-MM-DD")
-  private final LocalDate issuedDate;
-  private final Company buyer;
-  private final Company seller;
   private List<InvoiceEntry> entries;
 
   public Invoice() {

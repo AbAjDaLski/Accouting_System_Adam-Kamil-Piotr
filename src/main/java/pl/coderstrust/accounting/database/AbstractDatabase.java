@@ -60,5 +60,4 @@ public abstract class AbstractDatabase {
         .filter(predicate)
         .collect(Collectors.toSet());
   }
-
 }
