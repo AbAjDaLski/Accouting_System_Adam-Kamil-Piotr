@@ -132,8 +132,8 @@ public class InvoiceControllerTest {
         .perform(get("/invoices/2"))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[0].identifier", is("TestIdentifier6")))
-        .andExpect(jsonPath("$[0].id", is(2)));
+        .andExpect(jsonPath("$.identifier", is("TestIdentifier6")))
+        .andExpect(jsonPath("$.id", is(2)));
   }
 
   @Test
@@ -157,7 +157,7 @@ public class InvoiceControllerTest {
         .andExpect(status().isOk());
 
     mockMvc
-        .perform(get("/invoices/2018-01-01/2018-01-29"))
+        .perform(get("/invoices/2017-12-31/2018-01-29"))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(2)))
@@ -176,13 +176,13 @@ public class InvoiceControllerTest {
     mockMvc
         .perform(put(urlInvoices + "/1")
             .content("{\"id\":1,\"identifier\":\"UpdatedIdentifier\",\"issuedDate\":\"2018-02-01\""
-                    + ",\""
-                    + "buyer\":{\"name\":\"CompanyBuyerTest5\",\"taxId\":\"5555555555\",\""
-                    + "streetAndNumber\":\"Test Buyer Street 5\",\"postalCode\":\"55-555\",\""
-                    + "location\":\"TestLocationBuyer4\"},\"seller\":{\"name\":\""
-                    + "CompanySellerTest5\",\"taxId\":\"5555555555\",\"streetAndNumber\":\""
-                    + "Test Seller Street 5\",\"postalCode\":\"55-555\",\"location\":\""
-                    + "TestLocationSeller4\"},\"entries\":[]}")
+                + ",\""
+                + "buyer\":{\"name\":\"CompanyBuyerTest5\",\"taxId\":\"5555555555\",\""
+                + "streetAndNumber\":\"Test Buyer Street 5\",\"postalCode\":\"55-555\",\""
+                + "location\":\"TestLocationBuyer4\"},\"seller\":{\"name\":\""
+                + "CompanySellerTest5\",\"taxId\":\"5555555555\",\"streetAndNumber\":\""
+                + "Test Seller Street 5\",\"postalCode\":\"55-555\",\"location\":\""
+                + "TestLocationSeller4\"},\"entries\":[]}")
             .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().isOk());
 
@@ -190,7 +190,6 @@ public class InvoiceControllerTest {
         .perform(get("/invoices/1"))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(1)))
-        .andExpect(jsonPath("$[0].identifier", is("UpdatedIdentifier")));
+        .andExpect(jsonPath("$.identifier", is("UpdatedIdentifier")));
   }
 }

@@ -40,20 +40,6 @@ public class InvoiceService {
   public int saveInvoice(Invoice invoice) {
     return database.saveInvoice(invoice);
   }
-// on server
-// public int saveInvoice(Invoice invoice) {
-//    final Collection<InvoiceValidationException> validationErrors = invoiceValidator
-//        .validateInvoiceForSave(
-//            invoice);
-//    if (validationErrors.isEmpty()) {
-//      return database.saveInvoice(invoice);
-//    } else {
-//      for (InvoiceValidationException exception : validationErrors) {
-//        exception.printStackTrace();
-//      }
-//    }
-//    return 0;
-//  }
 
   public int updateInvoice(Invoice invoice) {
     if (invoice == null) {

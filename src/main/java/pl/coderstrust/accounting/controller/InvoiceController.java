@@ -17,11 +17,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.coderstrust.accounting.database.InMemoryDatabase;
 import pl.coderstrust.accounting.logic.InvoiceService;
 import pl.coderstrust.accounting.model.Invoice;
-import pl.coderstrust.accounting.model.validator.CompanyValidator;
-import pl.coderstrust.accounting.model.validator.InvoiceEntryValidator;
 import pl.coderstrust.accounting.model.validator.InvoiceValidator;
 import pl.coderstrust.accounting.model.validator.exception.InvoiceValidationException;
 
@@ -33,17 +30,15 @@ import java.util.Collection;
 @Api(value = "/{invoices}", description = "Operations on invoices")
 public class InvoiceController {
 
-  //  private InvoiceService invoiceService;
   private static Logger logger = LoggerFactory.getLogger(InvoiceController.class);
 
-//  public InvoiceController(InvoiceService invoiceService) {
-//    this.invoiceService = invoiceService;
-//  }
+  private InvoiceService invoiceService;
+  private InvoiceValidator invoiceValidator;
 
-  private final InvoiceValidator invoiceValidator = new InvoiceValidator(
-      new InvoiceEntryValidator(), new CompanyValidator());
-  private InvoiceService invoiceService = new InvoiceService(new InMemoryDatabase(),
-      new InvoiceValidator(new InvoiceEntryValidator(), new CompanyValidator()));
+  public InvoiceController(InvoiceService invoiceService, InvoiceValidator invoiceValidator) {
+    this.invoiceService = invoiceService;
+    this.invoiceValidator = invoiceValidator;
+  }
 
   @ApiOperation(value = "Find all invoices",
       notes = "Method returns list of all invoices")
@@ -68,14 +63,8 @@ public class InvoiceController {
       @ApiResponse(code = 404, message = "Invoice is not exist")})
   @GetMapping("/{id}")
   public Invoice findSingleInvoice(
-//      public ResponseEntity<?> findSingleIvoiceById(
       @PathVariable(name = "id", required = true) int id) {
     return invoiceService.findById(id);
-//    logger.info("Received find by id invoices request");
-//    Collection<Invoice> schearch = invoiceService.findInvoices(
-//        new Invoice(id, null, null, null, null, null), null, null);
-//    return schearch.isEmpty() ? ResponseEntity.notFound().build()
-//        : ResponseEntity.ok().body(schearch);
   }
 
   @ApiOperation(value = "Find invoices from the date range",
@@ -113,10 +102,6 @@ public class InvoiceController {
     }
     return ResponseEntity.badRequest().body(validationErrors);
   }
-//  @PostMapping
-//  public int saveInvoice(@RequestBody Invoice invoice) {
-//    return invoiceService.saveInvoice(invoice);
-//  }
 
   @ApiOperation(value = "Remove invoice by id",
       notes = "Method remove exist invoice")
@@ -132,9 +117,6 @@ public class InvoiceController {
     invoiceService.removeInvoice(id);
   }
 
-  //  @PutMapping
-//  public int updateInvoice(@RequestBody Invoice invoice) {
-//    return invoiceService.updateInvoice(invoice);
   @ApiOperation(value = "Update invoice by id",
       notes = "Method update exist invoice")
   @ApiResponses(value = {
@@ -148,8 +130,4 @@ public class InvoiceController {
     logger.info("Received update invoice request");
     invoiceService.updateInvoice(invoice);
   }
-//  @PutMapping
-//  public int updateInvoice(@RequestBody Invoice invoice) {
-//    return invoiceService.updateInvoice(invoice);
-//  }
 }

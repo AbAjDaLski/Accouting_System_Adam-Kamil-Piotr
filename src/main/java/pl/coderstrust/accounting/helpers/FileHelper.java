@@ -1,11 +1,10 @@
 package pl.coderstrust.accounting.helpers;
 
-
-import pl.coderstrust.accounting.model.Invoice;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.coderstrust.accounting.database.InMemoryDatabase;
+import pl.coderstrust.accounting.model.Invoice;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileHelper {
-  
+
   private static Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
   private static final String FILE_PATH_CANNOT_BE_NULL_MESSAGE = "File path cannot be null";
   private static final String LINE_CANNOT_BE_NULL_MESSAGE = "Line cannot be null";
