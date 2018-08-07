@@ -24,6 +24,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.coderstrust.accounting.helpers.InvoiceHelper;
+import pl.coderstrust.accounting.helpers.JsonConverter;
+import pl.coderstrust.accounting.model.Company;
+import pl.coderstrust.accounting.model.Invoice;
+
+import java.time.LocalDate;
+import java.time.Month;
 
 
 @RunWith(SpringRunner.class)
@@ -191,5 +197,29 @@ public class InvoiceControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.identifier", is("UpdatedIdentifier")));
+  }
+
+  @Test
+  public void shouldReturnInvoiceBySearchParams() throws Exception {
+    mockMvc
+        .perform(post(urlInvoices)
+            .content(InvoiceHelper.simpleInvoiceId5Json())
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(status().isOk());
+
+    String postResponse = mockMvc.perform(post(urlInvoices + "/searchParams")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .content(
+            JsonConverter
+                .toJson(new Invoice(5, "TestIdentifier5", LocalDate.of(2018, Month.JANUARY, 1),
+                    new Company("CompanyBuyerTest5", "5555555555", "TestLocationBuyer4", "55-555",
+                        "TestLocationBuyer4"),
+                    new Company("CompanySellerTest5", "5555555555", "Test Seller Street 5",
+                        "55-555",
+                        "TestLocationSeller4"), InvoiceHelper.getSampleFourInvoiceEntriesList()))))
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
   }
 }

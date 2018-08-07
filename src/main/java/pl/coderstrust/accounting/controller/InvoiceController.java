@@ -85,6 +85,19 @@ public class InvoiceController {
             dateFrom, dateTo);
   }
 
+  @ApiOperation(value = "Find invoices by parameter",
+      notes = "Method returns invoices according to search parameter")
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Found invoice"),
+      @ApiResponse(code = 400, message = "Bad format date, insert bad format, use format YYYY-MM-DD"),
+      @ApiResponse(code = 401, message = "Access unauthorized "),
+      @ApiResponse(code = 403, message = "Access forbidden "),
+      @ApiResponse(code = 404, message = "Invoices is not exist")})
+  @PostMapping("/searchParams")
+  public Collection<Invoice> findeSingleInvoiceBysearchparams(@RequestBody Invoice searchParams) {
+    return invoiceService.findInvoices(searchParams, null, null);
+  }
+
   @ApiOperation(value = "Add invoice",
       notes = "Method add new invoice")
   @ApiResponses(value = {
