@@ -14,6 +14,7 @@ import pl.coderstrust.accounting.model.validator.exception.InvoiceValidationExce
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class InvoiceService {
@@ -98,8 +99,8 @@ public class InvoiceService {
     }
   }
 
-  public Invoice findById(int id) {
-    return database.get(id);
+  public Optional<Invoice> findById(int id) {
+    return Optional.ofNullable(database.get(id));
   }
 
   public Collection<Invoice> findInvoices(Invoice searchParams, LocalDate issuedDateFrom,

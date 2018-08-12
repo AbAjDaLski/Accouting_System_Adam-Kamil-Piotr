@@ -5,13 +5,14 @@ import pl.coderstrust.accounting.model.Invoice;
 import pl.coderstrust.accounting.model.InvoiceEntry;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public abstract class AbstractDatabase {
+public abstract class AbstractDatabase implements Database {
 
   public Set<Invoice> searchResult = new HashSet<>();
 
@@ -59,5 +60,36 @@ public abstract class AbstractDatabase {
     return searchResult.stream()
         .filter(predicate)
         .collect(Collectors.toSet());
+  }
+
+  public Collection<Invoice> find(Invoice searchParams, LocalDate issuedDateFrom,
+      LocalDate issuedDateTo) {
+
+    Set<Invoice> searchResult = new HashSet<>(getAll());
+    searchResult = findByDateRange(searchResult, changeToSearchDateFrom(issuedDateFrom),
+        changeToSearchDateTo(issuedDateTo));
+
+    if (searchParams == null) {
+      return searchResult;
+    }
+    if (searchParams.getId() != null) {
+      searchResult = findById(searchParams.getId(), searchResult);
+    }
+    if (searchParams.getIdentifier() != null) {
+      searchResult = findByIdentifier(searchParams.getIdentifier(), searchResult);
+    }
+    if (searchParams.getIssuedDate() != null) {
+      searchResult = findByIssuedDate(searchParams.getIssuedDate(), searchResult);
+    }
+    if (searchParams.getBuyer() != null) {
+      searchResult = findByBuyer(searchParams.getBuyer(), searchResult);
+    }
+    if (searchParams.getSeller() != null) {
+      searchResult = findBySeller(searchParams.getSeller(), searchResult);
+    }
+    if (searchParams.getEntries() != null) {
+      searchResult = findByEntries(searchParams.getEntries(), searchResult);
+    }
+    return searchResult;
   }
 }

@@ -2,6 +2,7 @@ package pl.coderstrust.accounting.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,13 +18,13 @@ import javax.persistence.OneToMany;
 @Entity
 public class Invoice {
 
-  //  @ApiModelProperty(value = "id invoice", example = "2")
+  @ApiModelProperty(value = "id invoice", example = "1")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
-  //  @ApiModelProperty(value = "Invoice of number FV/RRRR/MM/DD", example = "FV/2018/05/23/1")
+  @ApiModelProperty(value = "Invoice of number FV/RRRR/MM/DD", example = "FV/2018/05/23/1")
   private String identifier;
-  //  @ApiModelProperty(value = "Format date RRRR-MM-DD")
+  @ApiModelProperty(value = "Format date RRRR-MM-DD")
   private LocalDate issuedDate;
 
   @ManyToOne(cascade = CascadeType.ALL)

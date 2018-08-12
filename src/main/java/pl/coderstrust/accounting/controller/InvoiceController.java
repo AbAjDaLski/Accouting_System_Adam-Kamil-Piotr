@@ -24,6 +24,7 @@ import pl.coderstrust.accounting.model.validator.exception.InvoiceValidationExce
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/invoices")
@@ -62,9 +63,11 @@ public class InvoiceController {
       @ApiResponse(code = 400, message = "Bad format date, use number"),
       @ApiResponse(code = 404, message = "Invoice is not exist")})
   @GetMapping("/{id}")
-  public Invoice findSingleInvoice(
+  public ResponseEntity<?> findSingleIvoiceById(
       @PathVariable(name = "id", required = true) int id) {
-    return invoiceService.findById(id);
+    Optional<Invoice> invoiceOptional = invoiceService.findById(id);
+    return invoiceOptional.isPresent() ? ResponseEntity.ok().body(invoiceOptional.get())
+        : ResponseEntity.notFound().build();
   }
 
   @ApiOperation(value = "Find invoices from the date range",
@@ -139,8 +142,14 @@ public class InvoiceController {
       @ApiResponse(code = 400, message = "insert bad format, use format YYYY-MM-DD"),
       @ApiResponse(code = 500, message = "Didn't update, invoice is not exist")})
   @PutMapping("/{id}")
-  public void updateInvoice(@PathVariable int id, @RequestBody Invoice invoice) {
+  public ResponseEntity updateInvoice(@PathVariable int id, @RequestBody Invoice invoice) {
     logger.info("Received update invoice request");
+    Collection<InvoiceValidationException> validationErrors = invoiceValidator
+        .validateInvoiceForUpdate(invoice);
+    if (!validationErrors.isEmpty()) {
+      return ResponseEntity.badRequest().body(validationErrors);
+    }
     invoiceService.updateInvoice(invoice);
+    return ResponseEntity.ok().build();
   }
 }

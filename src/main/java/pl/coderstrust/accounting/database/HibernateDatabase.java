@@ -4,18 +4,15 @@ import org.springframework.stereotype.Repository;
 import pl.coderstrust.accounting.database.hibernate.InvoiceRepository;
 import pl.coderstrust.accounting.model.Invoice;
 
-import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Repository
-public class HibernateDatabase extends AbstractDatabase implements Database {
+public class HibernateDatabase extends AbstractDatabase {
 
   private InvoiceRepository invoiceRepository;
-  private Set<Invoice> searchResult = new HashSet<>();
 
   public HibernateDatabase(
       InvoiceRepository invoiceRepository) {
@@ -29,10 +26,11 @@ public class HibernateDatabase extends AbstractDatabase implements Database {
 
   @Override
   public void updateInvoice(Invoice invoice) {
-    Invoice temInvoice = invoiceRepository.findById(invoice.getId()).orElse(null);
-    if (temInvoice != null && temInvoice.getId().equals(invoice.getId())) {
-      invoiceRepository.save(invoice);
+    Optional<Invoice> invoiceToUpdate = invoiceRepository.findById(invoice.getId());
+    if (!invoiceToUpdate.isPresent()) {
+      throw new IllegalStateException("Invoice with provided Id not exist");
     }
+    invoiceRepository.save(invoice);
   }
 
   @Override
@@ -43,37 +41,6 @@ public class HibernateDatabase extends AbstractDatabase implements Database {
   @Override
   public Invoice get(int id) {
     return invoiceRepository.findById(id).orElse(null);
-  }
-
-  @Override
-  public Collection<Invoice> find(Invoice searchParams, LocalDate issuedDateFrom,
-      LocalDate issuedDateTo) {
-    Set<Invoice> searchResult = new HashSet<>();
-    invoiceRepository.findAll().forEach(searchResult::add);
-
-    searchResult = findByDateRange(searchResult, changeToSearchDateFrom(issuedDateFrom),
-        changeToSearchDateTo(issuedDateTo));
-    if (searchParams != null) {
-      if (searchParams.getId() != null) {
-        searchResult = findById(searchParams.getId(), searchResult);
-      }
-      if (searchParams.getIdentifier() != null) {
-        searchResult = findByIdentifier(searchParams.getIdentifier(), searchResult);
-      }
-      if (searchParams.getIssuedDate() != null) {
-        searchResult = findByIssuedDate(searchParams.getIssuedDate(), searchResult);
-      }
-      if (searchParams.getBuyer() != null) {
-        searchResult = findByBuyer(searchParams.getBuyer(), searchResult);
-      }
-      if (searchParams.getSeller() != null) {
-        searchResult = findBySeller(searchParams.getSeller(), searchResult);
-      }
-      if (searchParams.getEntries() != null) {
-        searchResult = findByEntries(searchParams.getEntries(), searchResult);
-      }
-    }
-    return searchResult;
   }
 
   @Override
