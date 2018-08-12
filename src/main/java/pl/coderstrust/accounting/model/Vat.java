@@ -18,6 +18,7 @@ public enum Vat {
 
   @Id
   @GeneratedValue
+ // do poprawy BigDecimal
   private final int rate;
 
   @JsonCreator
