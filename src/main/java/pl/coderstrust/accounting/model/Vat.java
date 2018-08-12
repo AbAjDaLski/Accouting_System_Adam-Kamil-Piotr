@@ -12,6 +12,7 @@ public enum Vat {
     this.rate = rate;
   }
 
+ // do poprawy BigDecimal
   private final int rate;
 
   @JsonCreator

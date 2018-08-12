@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.coderstrust.accounting.database.InMemoryDatabase;
 import pl.coderstrust.accounting.logic.InvoiceService;
 import pl.coderstrust.accounting.model.Invoice;
 import pl.coderstrust.accounting.model.validator.CompanyValidator;
@@ -35,10 +34,13 @@ public class InvoiceController {
 
   private static Logger logger = LoggerFactory.getLogger(InvoiceController.class);
 
+  public InvoiceController(InvoiceService invoiceService) {
+    this.invoiceService = invoiceService;
+  }
+
   private final InvoiceValidator invoiceValidator = new InvoiceValidator(
       new InvoiceEntryValidator(), new CompanyValidator());
-  private InvoiceService invoiceService = new InvoiceService(new InMemoryDatabase(),
-      new InvoiceValidator(new InvoiceEntryValidator(), new CompanyValidator()));
+  private InvoiceService invoiceService;
 
   @ApiOperation(value = "Find all invoices",
       notes = "Method returns list of all invoices")
@@ -62,13 +64,13 @@ public class InvoiceController {
       @ApiResponse(code = 400, message = "Bad format date, use number"),
       @ApiResponse(code = 404, message = "Invoice is not exist")})
   @GetMapping("/{id}")
-  public ResponseEntity<?> findSingleIvoiceById(
+  public ResponseEntity<?> findSingleInvoiceById(
       @PathVariable(name = "id", required = true) int id) {
     logger.info("Received find by id invoices request");
-    Collection<Invoice> schearch = invoiceService.findInvoices(
+    Collection<Invoice> search = invoiceService.findInvoices(
         new Invoice(id, null, null, null, null, null), null, null);
-    return schearch.isEmpty() ? ResponseEntity.notFound().build()
-        : ResponseEntity.ok().body(schearch);
+    return search.isEmpty() ? ResponseEntity.notFound().build()
+        : ResponseEntity.ok().body(search);
   }
 
   @ApiOperation(value = "Find invoices from the date range",
@@ -80,7 +82,7 @@ public class InvoiceController {
       @ApiResponse(code = 403, message = "Access forbidden "),
       @ApiResponse(code = 404, message = "Invoices is not exist")})
   @GetMapping("{dateFrom}/{dateTo}")
-  public Collection<Invoice> findSingleIvoiceByDateRange(
+  public Collection<Invoice> findSingleInvoiceByDateRange(
       @PathVariable("dateFrom") @DateTimeFormat(iso = ISO.DATE) LocalDate dateFrom,
       @PathVariable("dateTo") @DateTimeFormat(iso = ISO.DATE) LocalDate dateTo) {
     logger.info("Received find invoices withing set date range request");

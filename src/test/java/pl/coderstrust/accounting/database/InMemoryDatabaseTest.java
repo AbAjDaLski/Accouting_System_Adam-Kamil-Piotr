@@ -151,7 +151,6 @@ public class InMemoryDatabaseTest {
         new Object[]{new Invoice(null, sampleInvoice.getIdentifier(), null, null, null, null)},
         new Object[]{new Invoice(null, null, sampleInvoice.getIssuedDate(), null, null, null)},
         new Object[]{new Invoice(null, null, null, sampleInvoice.getBuyer(), null, null)},
-        new Object[]{new Invoice(null, null, null, null, sampleInvoice.getSeller(), null)},
         new Object[]{new Invoice(null, null, null, null, null, sampleInvoice.getEntries())}
     };
   }
