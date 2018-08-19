@@ -78,7 +78,7 @@ public class InvoiceServiceTest {
   @Test
   public void shouldRemoveInvoice() throws IOException {
     //given
-    when(databaseMock.get(anyInt())).thenReturn(InvoiceHelper.getSampleInvoiceWithId1());
+    when(databaseMock.get(anyInt())).thenReturn(java.util.Optional.of(InvoiceHelper.getSampleInvoiceWithId1()));
 
     //when
     invoiceService.removeInvoice(1);
@@ -108,7 +108,7 @@ public class InvoiceServiceTest {
   public void shouldUpdateOnlyGivenParam(Invoice invoice) throws IOException {
     //given
     Invoice sampleInvoice = InvoiceHelper.getSampleInvoiceWithId1();
-    when(databaseMock.get(anyInt())).thenReturn(sampleInvoice);
+    when(databaseMock.get(anyInt())).thenReturn(java.util.Optional.ofNullable(sampleInvoice));
 
     //when
     invoiceService.updateInvoice(invoice);
@@ -210,7 +210,7 @@ public class InvoiceServiceTest {
     List<InvoiceValidationException> validationExceptions = new ArrayList<>();
     validationExceptions.add(new InvoiceValidationException("TEST"));
     when(invoiceValidatorMock.validateInvoiceForUpdate(any())).thenReturn(validationExceptions);
-    when(databaseMock.get(anyInt())).thenReturn(InvoiceHelper.getSampleInvoiceWithId1());
+    when(databaseMock.get(anyInt())).thenReturn(java.util.Optional.of(InvoiceHelper.getSampleInvoiceWithId1()));
     boolean thrown = false;
 
     //when
@@ -244,8 +244,8 @@ public class InvoiceServiceTest {
   @Test
   public void shouldGetAllInvoices() {
     //given
-    when(databaseMock.get(anyInt())).thenReturn(InvoiceHelper.getSampleInvoiceWithId1());
-    when(databaseMock.get(anyInt())).thenReturn(InvoiceHelper.getSampleInvoiceWithId2());
+    when(databaseMock.get(anyInt())).thenReturn(java.util.Optional.of(InvoiceHelper.getSampleInvoiceWithId1()));
+    when(databaseMock.get(anyInt())).thenReturn(java.util.Optional.of(InvoiceHelper.getSampleInvoiceWithId2()));
 
     //when
     invoiceService.getAll();
@@ -257,12 +257,12 @@ public class InvoiceServiceTest {
   @SuppressWarnings("unused")
   private Object[] updateParameters() {
     Invoice sampleInvoice = InvoiceHelper.getSampleInvoiceWithNullId();
-    return new Object[]{
-        new Object[]{new Invoice(1, sampleInvoice.getIdentifier(), null, null, null, null)},
-        new Object[]{new Invoice(1, null, sampleInvoice.getIssuedDate(), null, null, null)},
-        new Object[]{new Invoice(1, null, null, sampleInvoice.getBuyer(), null, null)},
-        new Object[]{new Invoice(1, null, null, null, sampleInvoice.getSeller(), null)},
-        new Object[]{new Invoice(1, null, null, null, null, sampleInvoice.getEntries())}
+    return new Object[] {
+        new Object[] {new Invoice(1, sampleInvoice.getIdentifier(), null, null, null, null)},
+        new Object[] {new Invoice(1, null, sampleInvoice.getIssuedDate(), null, null, null)},
+        new Object[] {new Invoice(1, null, null, sampleInvoice.getBuyer(), null, null)},
+        new Object[] {new Invoice(1, null, null, null, sampleInvoice.getSeller(), null)},
+        new Object[] {new Invoice(1, null, null, null, null, sampleInvoice.getEntries())}
     };
   }
 }

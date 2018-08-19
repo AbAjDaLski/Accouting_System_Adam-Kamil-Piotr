@@ -4,6 +4,7 @@ import pl.coderstrust.accounting.model.Invoice;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Optional;
 
 public interface Database {
 
@@ -13,7 +14,7 @@ public interface Database {
 
   void removeInvoice(int id);
 
-  Invoice get(int id);
+  Optional<Invoice> get(int id);
 
   Collection<Invoice> find(Invoice searchParams, LocalDate issuedDateFrom, LocalDate issuedDateTo);
 

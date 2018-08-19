@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(JUnitParamsRunner.class)
 public class InFileDatabaseTest {
@@ -191,9 +192,9 @@ public class InFileDatabaseTest {
       database.updateInvoice(updatedInvoice);
 
       //then
-      Invoice actual = database.get(1);
-      assertThat(actual.getIdentifier(), CoreMatchers.is(newIdentifier));
-      assertThat(actual.getIssuedDate(), CoreMatchers.is(newDate));
+      Optional<Invoice> actual = database.get(1);
+      assertThat(actual.get().getIdentifier(), CoreMatchers.is(newIdentifier));
+      assertThat(actual.get().getIssuedDate(), CoreMatchers.is(newDate));
     } finally {
       cleanTestFiles();
     }
@@ -281,11 +282,11 @@ public class InFileDatabaseTest {
 
       //then
       Invoice actual1 = invoice1;
-      Invoice expected1 = database.get(1);
-      invoicesAreIdentical(actual1, expected1);
+      Optional<Invoice> expected1 = database.get(1);
+      invoicesAreIdentical(actual1, expected1.get());
       Invoice actual2 = invoice3;
-      Invoice expected2 = database.get(3);
-      invoicesAreIdentical(actual2, expected2);
+      Optional<Invoice> expected2 = database.get(3);
+      invoicesAreIdentical(actual2, expected2.get());
     } finally {
       cleanTestFiles();
     }
@@ -342,13 +343,13 @@ public class InFileDatabaseTest {
   @SuppressWarnings("unused")
   private Object[] findParameters() {
     Invoice sampleInvoice = InvoiceHelper.getSampleInvoiceWithNullId();
-    return new Object[]{
-        new Object[]{new Invoice(1, null, null, null, null, null)},
-        new Object[]{new Invoice(null, sampleInvoice.getIdentifier(), null, null, null, null)},
-        new Object[]{new Invoice(null, null, sampleInvoice.getIssuedDate(), null, null, null)},
-        new Object[]{new Invoice(null, null, null, sampleInvoice.getBuyer(), null, null)},
-        new Object[]{new Invoice(null, null, null, null, sampleInvoice.getSeller(), null)},
-        new Object[]{new Invoice(null, null, null, null, null, sampleInvoice.getEntries())}
+    return new Object[] {
+        new Object[] {new Invoice(1, null, null, null, null, null)},
+        new Object[] {new Invoice(null, sampleInvoice.getIdentifier(), null, null, null, null)},
+        new Object[] {new Invoice(null, null, sampleInvoice.getIssuedDate(), null, null, null)},
+        new Object[] {new Invoice(null, null, null, sampleInvoice.getBuyer(), null, null)},
+        new Object[] {new Invoice(null, null, null, null, sampleInvoice.getSeller(), null)},
+        new Object[] {new Invoice(null, null, null, null, null, sampleInvoice.getEntries())}
     };
   }
 
@@ -380,10 +381,10 @@ public class InFileDatabaseTest {
     Invoice sample1 = InvoiceHelper.getSampleInvoiceWithId7();
     Invoice sample2 = InvoiceHelper.getSampleInvoiceWithId8_WithSameBuyerWhatId7();
     Invoice sample3 = InvoiceHelper.getSampleInvoiceWithId9_WithSameSellerWhatId8();
-    return new Object[]{
-        new Object[]{
+    return new Object[] {
+        new Object[] {
             new Invoice(null, null, null, sample1.getBuyer(), null, null)},
-        new Object[]{
+        new Object[] {
             new Invoice(null, null, null, null, sample2.getSeller(),
                 null)}
     };

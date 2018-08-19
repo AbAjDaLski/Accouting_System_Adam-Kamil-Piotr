@@ -62,13 +62,9 @@ public abstract class AbstractDatabase implements Database {
         .collect(Collectors.toSet());
   }
 
-  public Collection<Invoice> find(Invoice searchParams, LocalDate issuedDateFrom,
-      LocalDate issuedDateTo) {
-
+  public Collection<Invoice> find(Invoice searchParams, LocalDate issuedDateFrom, LocalDate issuedDateTo) {
     Set<Invoice> searchResult = new HashSet<>(getAll());
-    searchResult = findByDateRange(searchResult, changeToSearchDateFrom(issuedDateFrom),
-        changeToSearchDateTo(issuedDateTo));
-
+    searchResult = findByDateRange(searchResult, changeToSearchDateFrom(issuedDateFrom), changeToSearchDateTo(issuedDateTo));
     if (searchParams == null) {
       return searchResult;
     }

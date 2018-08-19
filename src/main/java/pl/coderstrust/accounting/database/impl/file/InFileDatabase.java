@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 public class InFileDatabase extends AbstractDatabase implements Database {
 
@@ -79,14 +80,14 @@ public class InFileDatabase extends AbstractDatabase implements Database {
   }
 
   @Override
-  public Invoice get(int id) {
+  public Optional<Invoice> get(int id) {
     Invoice invoiceTaken = null;
     try {
       invoiceTaken = FileHelper.getInvoiceFromFileById(databaseFilePath, id);
     } catch (IOException ioex) {
       throw new RuntimeException(ioex);
     }
-    return invoiceTaken;
+    return Optional.ofNullable(invoiceTaken);
   }
 
   @Override

@@ -66,7 +66,8 @@ public class InvoiceController {
   public ResponseEntity<?> findSingleIvoiceById(
       @PathVariable(name = "id", required = true) int id) {
     Optional<Invoice> invoiceOptional = invoiceService.findById(id);
-    return invoiceOptional.isPresent() ? ResponseEntity.ok().body(invoiceOptional.get())
+    return invoiceOptional.isPresent()
+        ? ResponseEntity.ok().body(invoiceOptional.get())
         : ResponseEntity.notFound().build();
   }
 
@@ -142,7 +143,7 @@ public class InvoiceController {
       @ApiResponse(code = 400, message = "insert bad format, use format YYYY-MM-DD"),
       @ApiResponse(code = 500, message = "Didn't update, invoice is not exist")})
   @PutMapping("/{id}")
-  public ResponseEntity updateInvoice(@PathVariable int id, @RequestBody Invoice invoice) {
+  public ResponseEntity<?> updateInvoice(@PathVariable int id, @RequestBody Invoice invoice) {
     logger.info("Received update invoice request");
     Collection<InvoiceValidationException> validationErrors = invoiceValidator
         .validateInvoiceForUpdate(invoice);

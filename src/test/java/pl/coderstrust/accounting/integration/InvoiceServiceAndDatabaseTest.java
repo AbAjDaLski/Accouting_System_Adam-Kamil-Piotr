@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 import junitparams.JUnitParamsRunner;
@@ -22,6 +21,7 @@ import pl.coderstrust.accounting.model.validator.InvoiceValidator;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Optional;
 
 @RunWith(JUnitParamsRunner.class)
 public class InvoiceServiceAndDatabaseTest {
@@ -56,10 +56,10 @@ public class InvoiceServiceAndDatabaseTest {
     invoiceService.saveInvoice(invoice4);
 
     //then
-    assertThat(database.get(1).getIdentifier(), is(invoice1.getIdentifier()));
-    assertThat(database.get(2).getIdentifier(), is(invoice2.getIdentifier()));
-    assertThat(database.get(3).getIdentifier(), is(invoice3.getIdentifier()));
-    assertThat(database.get(4).getIdentifier(), is(invoice4.getIdentifier()));
+    assertThat(database.get(1).get().getIdentifier(), is(invoice1.getIdentifier()));
+    assertThat(database.get(2).get().getIdentifier(), is(invoice2.getIdentifier()));
+    assertThat(database.get(3).get().getIdentifier(), is(invoice3.getIdentifier()));
+    assertThat(database.get(4).get().getIdentifier(), is(invoice4.getIdentifier()));
   }
 
   @Test
@@ -73,9 +73,9 @@ public class InvoiceServiceAndDatabaseTest {
     invoiceService.saveInvoice(invoice);
 
     //then
-    assertThat(database.get(1).getId(), is(1));
-    assertThat(database.get(2).getId(), is(2));
-    assertThat(database.get(3).getId(), is(3));
+    assertThat(database.get(1).get().getId(), is(1));
+    assertThat(database.get(2).get().getId(), is(2));
+    assertThat(database.get(3).get().getId(), is(3));
   }
 
   @Test
@@ -93,9 +93,9 @@ public class InvoiceServiceAndDatabaseTest {
     invoiceService.removeInvoice(2);
 
     //then
-    assertNull(database.get(1));
-    assertNull(database.get(2));
-    assertThat(database.get(3).getId(), is(database.get(3).getId()));
+    assertEquals(Optional.empty(), database.get(1));
+    assertEquals(Optional.empty(), database.get(2));
+    assertThat(database.get(3).get().getId(), is(database.get(3).get().getId()));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -138,13 +138,13 @@ public class InvoiceServiceAndDatabaseTest {
   @SuppressWarnings("unused")
   private Object[] findParameters() {
     Invoice sampleInvoice = InvoiceHelper.getSampleInvoiceWithNullId();
-    return new Object[]{
-        new Object[]{new Invoice(1, null, null, null, null, null)},
-        new Object[]{new Invoice(null, sampleInvoice.getIdentifier(), null, null, null, null)},
-        new Object[]{new Invoice(null, null, sampleInvoice.getIssuedDate(), null, null, null)},
-        new Object[]{new Invoice(null, null, null, sampleInvoice.getBuyer(), null, null)},
-        new Object[]{new Invoice(null, null, null, null, sampleInvoice.getSeller(), null)},
-        new Object[]{new Invoice(null, null, null, null, null, sampleInvoice.getEntries())}
+    return new Object[] {
+        new Object[] {new Invoice(1, null, null, null, null, null)},
+        new Object[] {new Invoice(null, sampleInvoice.getIdentifier(), null, null, null, null)},
+        new Object[] {new Invoice(null, null, sampleInvoice.getIssuedDate(), null, null, null)},
+        new Object[] {new Invoice(null, null, null, sampleInvoice.getBuyer(), null, null)},
+        new Object[] {new Invoice(null, null, null, null, sampleInvoice.getSeller(), null)},
+        new Object[] {new Invoice(null, null, null, null, null, sampleInvoice.getEntries())}
     };
   }
 
@@ -221,9 +221,9 @@ public class InvoiceServiceAndDatabaseTest {
     invoiceService.updateInvoice(updatedInvoice);
 
     //then
-    Invoice actual = database.get(1);
-    assertThat(actual.getIdentifier(), is(newIdentifier));
-    assertThat(actual.getIssuedDate(), is(newDate));
+    Optional<Invoice> actual = database.get(1);
+    assertThat(actual.get().getIdentifier(), is(newIdentifier));
+    assertThat(actual.get().getIssuedDate(), is(newDate));
   }
 
   @Test

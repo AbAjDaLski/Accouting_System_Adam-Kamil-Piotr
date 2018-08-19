@@ -51,27 +51,26 @@ public class InvoiceService {
       logger.error(INVOICE_TO_UPDATE_MUST_HAVE_A_VALID_ID_MESSAGE);
       throw new IllegalArgumentException(INVOICE_TO_UPDATE_MUST_HAVE_A_VALID_ID_MESSAGE);
     }
-    Invoice current = database.get(invoice.getId());
-    if (current == null) {
+    Optional<Invoice> current = database.get(invoice.getId());
+    if (!current.isPresent()) {
       logger.error(CANNOT_UPDATE_AN_INVOICE_WITH_GIVEN_ID_MESSAGE + invoice.getId() + " doesn't "
           + "exist");
       throw new IllegalArgumentException(
           CANNOT_UPDATE_AN_INVOICE_WITH_GIVEN_ID_MESSAGE + invoice.getId() + " doesn't exist");
+    }
+    Invoice invoiceToUpdate = prepareInvoiceToUpdate(invoice, current.get());
+    Collection<InvoiceValidationException> validationExceptions = invoiceValidator
+        .validateInvoiceForUpdate(invoiceToUpdate);
+    if (validationExceptions.isEmpty()) {
+      database.updateInvoice(invoiceToUpdate);
     } else {
-      Invoice invoiceToUpdate = prepareInvoiceToUpdate(invoice, current);
-      Collection<InvoiceValidationException> validationExceptions = invoiceValidator
-          .validateInvoiceForUpdate(invoiceToUpdate);
-      if (validationExceptions.isEmpty()) {
-        database.updateInvoice(invoiceToUpdate);
-      } else {
-        StringBuilder sb = new StringBuilder("The updated invoice is not correct: ");
-        for (InvoiceValidationException exception : validationExceptions) {
-          sb.append(exception.getMessage());
-          sb.append("\n");
-        }
-        logger.error(sb.toString());
-        throw new IllegalArgumentException(sb.toString());
+      StringBuilder sb = new StringBuilder("The updated invoice is not correct: ");
+      for (InvoiceValidationException exception : validationExceptions) {
+        sb.append(exception.getMessage());
+        sb.append("\n");
       }
+      logger.error(sb.toString());
+      throw new IllegalArgumentException(sb.toString());
     }
     return invoice.getId();
   }
@@ -100,7 +99,7 @@ public class InvoiceService {
   }
 
   public Optional<Invoice> findById(int id) {
-    return Optional.ofNullable(database.get(id));
+    return database.get(id);
   }
 
   public Collection<Invoice> findInvoices(Invoice searchParams, LocalDate issuedDateFrom,

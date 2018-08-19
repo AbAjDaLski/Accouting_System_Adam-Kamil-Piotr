@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class InMemoryDatabase implements Database {
@@ -46,9 +47,9 @@ public class InMemoryDatabase implements Database {
   }
 
   @Override
-  public Invoice get(int id) {
+  public Optional<Invoice> get(int id) {
     logger.info("Invoice " + id + " found");
-    return invoices.get(id);
+    return Optional.ofNullable(invoices.get(id));
   }
 
   @Override

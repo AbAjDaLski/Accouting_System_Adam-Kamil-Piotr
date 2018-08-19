@@ -28,7 +28,7 @@ public class HibernateDatabase extends AbstractDatabase {
   public void updateInvoice(Invoice invoice) {
     Optional<Invoice> invoiceToUpdate = invoiceRepository.findById(invoice.getId());
     if (!invoiceToUpdate.isPresent()) {
-      throw new IllegalStateException("Invoice with provided Id not exist");
+      throw new IllegalStateException("Invoice with provided id does not exist");
     }
     invoiceRepository.save(invoice);
   }
@@ -39,8 +39,8 @@ public class HibernateDatabase extends AbstractDatabase {
   }
 
   @Override
-  public Invoice get(int id) {
-    return invoiceRepository.findById(id).orElse(null);
+  public Optional<Invoice> get(int id) {
+    return invoiceRepository.findById(id);
   }
 
   @Override
