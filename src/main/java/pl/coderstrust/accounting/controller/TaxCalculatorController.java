@@ -18,27 +18,27 @@ private TaxCalculatorService taxCalculatorService;
   }
 
   @GetMapping("/getIncome")
-  public BigDecimal getIncome() {
-    return taxCalculatorService.getIncome();
+  public BigDecimal getRevenues() {
+    return taxCalculatorService.getRevenues();
   }
 
   @GetMapping("/getOutcome")
-  public BigDecimal getOutcome() {
-    return taxCalculatorService.getOutcome();
+  public BigDecimal getCosts() {
+    return taxCalculatorService.getCosts();
   }
 
-  @GetMapping("/getIncomeVat")
+  @GetMapping("/getVatPayable")
   public BigDecimal getIncomeVat() {
-    return taxCalculatorService.getIncomeVat();
+    return taxCalculatorService.getVatPayable();
   }
 
-  @GetMapping("/getOutcomeVat")
+  @GetMapping("/getVatReceivable")
   public BigDecimal getOutcomeVat() {
-    return taxCalculatorService.getOutcomeVat();
+    return taxCalculatorService.getVatReceivable();
   }
 
   @GetMapping("/getFinancialResult")
   public BigDecimal getFinancialResult() {
-    return taxCalculatorService.getIncomeVat().subtract(taxCalculatorService.getOutcome());
+    return taxCalculatorService.getVatPayable().subtract(taxCalculatorService.getCosts());
   }
 }

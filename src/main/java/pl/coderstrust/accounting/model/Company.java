@@ -13,7 +13,7 @@ import javax.persistence.Id;
 @Entity
 public class Company {
 
-  public static final String MY_COMPANY_TAX_ID = "123456789";
+  public static final String MY_COMPANY_TAX_ID = "0123456789";
 
   private final String name;
   private final String taxId;

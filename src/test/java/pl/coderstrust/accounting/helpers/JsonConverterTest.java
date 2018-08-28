@@ -23,11 +23,11 @@ public class JsonConverterTest {
               + "\"buyer\":{\"name\":\"CompanyBuyerTest5\",\"taxId\":\"5555555555\","
               + "\"streetAndNumber\":\"Test Buyer Street 5\",\"postalCode\":\"55-555\","
               + "\"location\":\"TestLocationBuyer4\"},\"seller\":{\"name\":\"CompanySellerTest5\","
-              + "\"taxId\":\"5555555555\",\"streetAndNumber\":\"Test Seller Street 5\","
+              + "\"taxId\":\"0123456789\",\"streetAndNumber\":\"Test Seller Street 5\","
               + "\"postalCode\":\"55-555\",\"location\":\"TestLocationSeller4\"},\"entries\":[]}",
           InvoiceHelper.getSampleInvoiceWithId5()),
       $("{\"id\":6,\"identifier\":\"TestIdentifier6\",\"issuedDate\":\"2018-01-01\","
-              + "\"buyer\":{\"name\":\"CompanyBuyerTest6\",\"taxId\":\"666666666\","
+              + "\"buyer\":{\"name\":\"CompanyBuyerTest6\",\"taxId\":\"0123456789\","
               + "\"streetAndNumber\":\"Test Buyer Street 6\",\"postalCode\":\"66666\","
               + "\"location\":\"TestLocationBuyer4\"},\"seller\":{\"name\":\"CompanySellerTest6\","
               + "\"taxId\":\"666666666\",\"streetAndNumber\":\"Test Seller Street 4\","
@@ -38,7 +38,7 @@ public class JsonConverterTest {
               + "\"buyer\":{\"name\":\"CompanyBuyerTest7\",\"taxId\":\"777777777\","
               + "\"streetAndNumber\":\"Test Buyer Street 7\",\"postalCode\":\"77777\","
               + "\"location\":\"TestLocationBuyer4\"},\"seller\":{\"name\":\"CompanySellerTest7\","
-              + "\"taxId\":\"777777777\",\"streetAndNumber\":\"Test Seller Street 7\","
+              + "\"taxId\":\"0123456789\",\"streetAndNumber\":\"Test Seller Street 7\","
               + "\"postalCode\":\"77777\",\"location\":\"TestLocationSeller4\"},"
               + "\"entries\":[{\"description\":\"Test Entry #1\",\"price\":10,\"vat\":23},"
               + "{\"description\":\"Test Entry #2\",\"price\":10,\"vat\":8},"
