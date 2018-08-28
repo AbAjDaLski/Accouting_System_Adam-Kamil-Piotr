@@ -24,43 +24,41 @@ public class TaxCalculatorService {
   }
 
   private BigDecimal calculateGeneric(Function<InvoiceEntry,BigDecimal> getValueFunction, Function<Invoice,Company> getCompanyFunction) {
-    BigDecimal sumOutcomeVAT = BigDecimal.valueOf(0.00);
+    BigDecimal sum = BigDecimal.valueOf(0);
 
     for (Invoice invoice : database.getAll()) {
       for (InvoiceEntry entry : invoice.getEntries()) {
         if (getCompanyFunction.apply(invoice).getTaxId().equals(MY_COMPANY_TAX_ID)) {
-          sumOutcomeVAT = sumOutcomeVAT
+          sum = sum
                .add(getValueFunction.apply(entry));
         }
       }
     }
-    return sumOutcomeVAT;
+    return sum;
   }
 
   private BigDecimal getVatValue(InvoiceEntry entry) {
-    return entry.getPrice().multiply
-        (BigDecimal.valueOf(
-            (entry.getVat().getValue())
-                / 100.00));
+    return entry.getPrice().multiply(
+            (entry.getVat().getValue()).divide(BigDecimal.valueOf(100)));
   }
 
   private BigDecimal getIncomeValue(InvoiceEntry entry) {
     return entry.getPrice();
   }
 
-  public BigDecimal getIncomeVat() {
+  public BigDecimal getVatPayable() {
     return calculateGeneric(this::getVatValue, Invoice::getSeller);
   }
 
-  public BigDecimal getIncome() {
+  public BigDecimal getRevenues() {
     return calculateGeneric(this::getIncomeValue, Invoice::getSeller);
   }
 
-  public BigDecimal getOutcomeVat() {
+  public BigDecimal getVatReceivable() {
     return calculateGeneric(this::getVatValue, Invoice::getBuyer);
   }
 
-  public BigDecimal getOutcome() {
+  public BigDecimal getCosts() {
     return calculateGeneric(this::getIncomeValue, Invoice::getBuyer);
   }
 }

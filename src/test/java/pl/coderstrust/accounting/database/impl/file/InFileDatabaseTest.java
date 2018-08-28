@@ -58,7 +58,7 @@ public class InFileDatabaseTest {
           + ",\"identifier\":\"TestIdentifier0\""
           + ",\"issuedDate\":\"" + LocalDate.now() + "\""
           + ",\"buyer\":{\"name\":\"CompanyBuyerTest0\""
-          + ",\"taxId\":\"000000000\""
+          + ",\"taxId\":\"0123456789\""
           + ",\"streetAndNumber\":\"Test Buyer Street 0\""
           + ",\"postalCode\":\"00-000\",\"location\":\"TestLocationBuyer0\"}"
           + ",\"seller\":{\"name\":\"CompanySellerTest0\",\"taxId\":\"0000000000\""
