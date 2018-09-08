@@ -26,14 +26,14 @@ public class TaxCalculatorService {
     this.invoiceValidator = invoiceValidator;
   }
 
-  private BigDecimal calculateGeneric(Function<InvoiceEntry,BigDecimal> getValueFunction, Function<Invoice,Company> getCompanyFunction) {
+  private BigDecimal calculateGeneric(Function<InvoiceEntry, BigDecimal> getValueFunction, Function<Invoice, Company> getCompanyFunction) {
     BigDecimal sum = BigDecimal.valueOf(0);
 
     for (Invoice invoice : database.getAll()) {
       for (InvoiceEntry entry : invoice.getEntries()) {
         if (getCompanyFunction.apply(invoice).getTaxId().equals(MY_COMPANY_TAX_ID)) {
           sum = sum
-               .add(getValueFunction.apply(entry));
+              .add(getValueFunction.apply(entry));
         }
       }
     }
@@ -42,7 +42,7 @@ public class TaxCalculatorService {
 
   private BigDecimal getVatValue(InvoiceEntry entry) {
     return entry.getPrice().multiply(
-            (entry.getVat().getValue()).divide(BigDecimal.valueOf(100)));
+        (entry.getVat().getValue()).divide(BigDecimal.valueOf(100)));
   }
 
   private BigDecimal getIncomeValue(InvoiceEntry entry) {

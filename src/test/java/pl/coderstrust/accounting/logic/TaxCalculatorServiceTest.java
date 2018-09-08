@@ -36,7 +36,7 @@ public class TaxCalculatorServiceTest {
 
   List<List<Invoice>> parameters = Arrays.asList(
       Arrays.asList(InvoiceHelper.getSampleInvoiceWithId0(),
-          InvoiceHelper.getSampleInvoiceWithId1(),InvoiceHelper.getSampleInvoiceWithId2(),
+          InvoiceHelper.getSampleInvoiceWithId1(), InvoiceHelper.getSampleInvoiceWithId2(),
           InvoiceHelper.getSampleInvoiceWithId3(), InvoiceHelper.getSampleInvoiceWithId4())
 
   );
@@ -47,7 +47,6 @@ public class TaxCalculatorServiceTest {
 
     //given
     BigDecimal expected = BigDecimal.valueOf(50);
-
 
     //when
     when(databaseMock.getAll()).thenReturn(sampleDatabase);
@@ -109,7 +108,6 @@ public class TaxCalculatorServiceTest {
 
     //given
     BigDecimal expected = BigDecimal.valueOf(4.4);
-
 
     //when
     when(databaseMock.getAll()).thenReturn(sampleDatabase);

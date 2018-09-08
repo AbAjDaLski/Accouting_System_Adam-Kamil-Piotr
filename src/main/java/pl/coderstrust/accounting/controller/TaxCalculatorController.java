@@ -11,9 +11,9 @@ import java.math.BigDecimal;
 @RequestMapping("/calculation")
 public class TaxCalculatorController {
 
-private TaxCalculatorService taxCalculatorService;
+  private TaxCalculatorService taxCalculatorService;
 
-  public TaxCalculatorController (TaxCalculatorService taxCalculatorService) {
+  public TaxCalculatorController(TaxCalculatorService taxCalculatorService) {
     this.taxCalculatorService = taxCalculatorService;
   }
 
