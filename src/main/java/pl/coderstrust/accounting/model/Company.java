@@ -15,11 +15,11 @@ public class Company {
 
   public static final String MY_COMPANY_TAX_ID = "0123456789";
 
-  private final String name;
-  private final String taxId;
-  private final String streetAndNumber;
-  private final String postalCode;
-  private final String location;
+//  private final String name;
+//  private final String taxId;
+//  private final String streetAndNumber;
+//  private final String postalCode;
+//  private final String location;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;

@@ -17,11 +17,9 @@ public enum Vat {
     this.rate = rate;
   }
 
-  private final BigDecimal rate;
   @Id
   @GeneratedValue
- // do poprawy BigDecimal
-  private final int rate;
+  private final BigDecimal rate;
 
   @JsonCreator
   public static Vat fromValue(BigDecimal value) {

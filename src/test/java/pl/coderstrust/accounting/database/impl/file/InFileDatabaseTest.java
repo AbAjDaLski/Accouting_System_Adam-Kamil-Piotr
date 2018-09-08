@@ -240,7 +240,7 @@ public class InFileDatabaseTest {
           + ",\"identifier\":\"TestIdentifier2\""
           + ",\"issuedDate\":\"" + LocalDate.now() + "\""
           + ",\"buyer\":{\"name\":\"CompanyBuyerTest2\""
-          + ",\"taxId\":\"2222222222\""
+          + ",\"taxId\":\"0123456789\""
           + ",\"streetAndNumber\":\"Test Buyer Street 2\""
           + ",\"postalCode\":\"22-222\",\"location\":\"TestLocationBuyer2\"}"
           + ",\"seller\":{\"name\":\"CompanySellerTest2\",\"taxId\":\"2222222222\""
@@ -256,7 +256,7 @@ public class InFileDatabaseTest {
           + ",\"taxId\":\"3333333333\""
           + ",\"streetAndNumber\":\"Test Buyer Street 3\""
           + ",\"postalCode\":\"33-333\",\"location\":\"TestLocationBuyer3\"}"
-          + ",\"seller\":{\"name\":\"CompanySellerTest3\",\"taxId\":\"3333333333\""
+          + ",\"seller\":{\"name\":\"CompanySellerTest3\",\"taxId\":\"0123456789\""
           + ",\"streetAndNumber\":\"Test Seller Street 3\",\"postalCode\":\"33-333\""
           + ",\"location\":\"TestLocationSeller3\"},\"entries\":[{\"description\":\"Test Entry #3\""
           + ",\"price\":10,\"vat\":8}]}";

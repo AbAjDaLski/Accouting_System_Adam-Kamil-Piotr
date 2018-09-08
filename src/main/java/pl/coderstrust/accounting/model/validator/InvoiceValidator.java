@@ -84,7 +84,22 @@ public class InvoiceValidator {
           .forEach(validationException -> validationExceptions.add(new InvoiceValidationException(
               "Validation of entry failed, message: " + validationException))));
     }
-
+    if (invoice.getBuyer() == null) {
+      logger.error(EXP_NOT_EMPTY_INV_IDENTIFIER);
+      validationExceptions.add(new InvoiceValidationException("Expected not empty buyer"));
+    } else {
+      companyValidator.validate(invoice.getBuyer())
+          .forEach((validationException -> validationExceptions.add(new InvoiceValidationException(
+              "Validation of buyer failed, message: " + validationException.getMessage()))));
+    }
+    if (invoice.getSeller() == null) {
+      logger.error("Expected not empty seller");
+      validationExceptions.add(new InvoiceValidationException("Expected not empty seller"));
+    } else {
+      companyValidator.validate(invoice.getSeller())
+          .forEach((validationException -> validationExceptions.add(new InvoiceValidationException(
+              "Validation of seller failed, message: " + validationException.getMessage()))));
+    }
     return validationExceptions;
   }
 }

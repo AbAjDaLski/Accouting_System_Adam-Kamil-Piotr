@@ -3,12 +3,12 @@ package pl.coderstrust.accounting.logic;
 import static pl.coderstrust.accounting.model.Company.MY_COMPANY_TAX_ID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Company;
 import pl.coderstrust.accounting.model.Invoice;
 import pl.coderstrust.accounting.model.InvoiceEntry;
+import pl.coderstrust.accounting.model.validator.InvoiceValidator;
 
 import java.math.BigDecimal;
 import java.util.function.Function;
@@ -17,10 +17,13 @@ import java.util.function.Function;
 public class TaxCalculatorService {
 
   private final Database database;
+  private final InvoiceValidator invoiceValidator;
 
   @Autowired
-  public TaxCalculatorService(@Qualifier("inMemoryDatabase") Database database) {
+  public TaxCalculatorService(Database database,
+      InvoiceValidator invoiceValidator) {
     this.database = database;
+    this.invoiceValidator = invoiceValidator;
   }
 
   private BigDecimal calculateGeneric(Function<InvoiceEntry,BigDecimal> getValueFunction, Function<Invoice,Company> getCompanyFunction) {
