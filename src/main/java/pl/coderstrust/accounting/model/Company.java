@@ -13,6 +13,8 @@ import javax.persistence.Id;
 @Entity
 public class Company {
 
+  public static final String MY_COMPANY_TAX_ID = "0123456789";
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
