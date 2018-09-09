@@ -43,7 +43,7 @@ public class InvoiceHelper {
   }
 
   public static Invoice getSampleInvoiceWithId0() {
-    Company buyer = new Company("CompanyBuyerTest0", "000000000", "Test Buyer Street 0", "00-000",
+    Company buyer = new Company("CompanyBuyerTest0", "0123456789", "Test Buyer Street 0", "00-000",
         "TestLocationBuyer0");
     Company seller = new Company("CompanySellerTest0", "0000000000", "Test Seller Street 0",
         "00-000",
@@ -55,7 +55,7 @@ public class InvoiceHelper {
   public static Invoice getSampleInvoiceWithId1() {
     Company buyer = new Company("CompanyBuyerTest1", "1111111111", "Test Buyer Street 1", "11-111",
         "TestLocationBuyer1");
-    Company seller = new Company("CompanySellerTest1", "1111111111", "Test Seller Street 1",
+    Company seller = new Company("CompanySellerTest1", "0123456789", "Test Seller Street 1",
         "11-111",
         "TestLocationSeller1");
     List<InvoiceEntry> entries = getSampleFourInvoiceEntriesList();
@@ -63,7 +63,7 @@ public class InvoiceHelper {
   }
 
   public static Invoice getSampleInvoiceWithId2() {
-    Company buyer = new Company("CompanyBuyerTest2", "2222222222", "Test Buyer Street 2", "22-222",
+    Company buyer = new Company("CompanyBuyerTest2", "0123456789", "Test Buyer Street 2", "22-222",
         "TestLocationBuyer2");
     Company seller = new Company("CompanySellerTest2", "2222222222", "Test Seller Street 2",
         "22-222",
@@ -77,7 +77,7 @@ public class InvoiceHelper {
   public static Invoice getSampleInvoiceWithId3() {
     Company buyer = new Company("CompanyBuyerTest3", "3333333333", "Test Buyer Street 3", "33-333",
         "TestLocationBuyer3");
-    Company seller = new Company("CompanySellerTest3", "3333333333", "Test Seller Street 3",
+    Company seller = new Company("CompanySellerTest3", "0123456789", "Test Seller Street 3",
         "33-333",
         "TestLocationSeller3");
     InvoiceEntry entry = new InvoiceEntry("Test Entry #3", BigDecimal.TEN, Vat.REDUCED1);
@@ -88,7 +88,7 @@ public class InvoiceHelper {
   }
 
   public static Invoice getSampleInvoiceWithId4() {
-    Company buyer = new Company("CompanyBuyerTest4", "4444444444", "Test Buyer Street 4", "44-444",
+    Company buyer = new Company("CompanyBuyerTest4", "0123456789", "Test Buyer Street 4", "44-444",
         "TestLocationBuyer4");
     Company seller = new Company("CompanySellerTest4", "4444444444", "Test Seller Street 4",
         "44-444",
@@ -102,7 +102,7 @@ public class InvoiceHelper {
   public static Invoice getSampleInvoiceWithId5() {
     Company buyer = new Company("CompanyBuyerTest5", "5555555555", "Test Buyer Street 5", "55-555",
         "TestLocationBuyer4");
-    Company seller = new Company("CompanySellerTest5", "5555555555", "Test Seller Street 5",
+    Company seller = new Company("CompanySellerTest5", "0123456789", "Test Seller Street 5",
         "55-555",
         "TestLocationSeller4");
     return new Invoice(5, "TestIdentifier5", LocalDate.of(2018, Month.JANUARY, 1), buyer, seller,
@@ -110,7 +110,7 @@ public class InvoiceHelper {
   }
 
   public static Invoice getSampleInvoiceWithId6() {
-    Company buyer = new Company("CompanyBuyerTest6", "666666666", "Test Buyer Street 6", "66666",
+    Company buyer = new Company("CompanyBuyerTest6", "0123456789", "Test Buyer Street 6", "66666",
         "TestLocationBuyer4");
     Company seller = new Company("CompanySellerTest6", "666666666", "Test Seller Street 4", "66666",
         "TestLocationSeller4");
@@ -121,7 +121,7 @@ public class InvoiceHelper {
   public static Invoice getSampleInvoiceWithId7() {
     Company buyer = new Company("CompanyBuyerTest7", "777777777", "Test Buyer Street 7", "77777",
         "TestLocationBuyer4");
-    Company seller = new Company("CompanySellerTest7", "777777777", "Test Seller Street 7", "77777",
+    Company seller = new Company("CompanySellerTest7", "0123456789", "Test Seller Street 7", "77777",
         "TestLocationSeller4");
     return new Invoice(7, "TestIdentifier7", LocalDate.of(2018, Month.JANUARY, 1), buyer, seller,
         InvoiceHelper.getSampleFourInvoiceEntriesList());
