@@ -44,7 +44,7 @@ public class InvoiceValidator {
   private List<InvoiceValidationException> validate(Invoice invoice, boolean checkForId) {
     List<InvoiceValidationException> validationExceptions = new LinkedList<>();
     if (checkForId) {
-      if (invoice.getId() == null && checkForId) {
+      if (invoice.getId() == null) {
         logger.error(EXPECTED_NOT_EMPTY_ID);
         validationExceptions.add(new InvoiceValidationException(EXPECTED_NOT_EMPTY_ID));
       } else {
@@ -84,7 +84,22 @@ public class InvoiceValidator {
           .forEach(validationException -> validationExceptions.add(new InvoiceValidationException(
               "Validation of entry failed, message: " + validationException))));
     }
-
+    if (invoice.getBuyer() == null) {
+      logger.error(EXP_NOT_EMPTY_INV_IDENTIFIER);
+      validationExceptions.add(new InvoiceValidationException("Expected not empty buyer"));
+    } else {
+      companyValidator.validate(invoice.getBuyer())
+          .forEach((validationException -> validationExceptions.add(new InvoiceValidationException(
+              "Validation of buyer failed, message: " + validationException.getMessage()))));
+    }
+    if (invoice.getSeller() == null) {
+      logger.error("Expected not empty seller");
+      validationExceptions.add(new InvoiceValidationException("Expected not empty seller"));
+    } else {
+      companyValidator.validate(invoice.getSeller())
+          .forEach((validationException -> validationExceptions.add(new InvoiceValidationException(
+              "Validation of seller failed, message: " + validationException.getMessage()))));
+    }
     return validationExceptions;
   }
 }

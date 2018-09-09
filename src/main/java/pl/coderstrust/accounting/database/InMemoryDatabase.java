@@ -22,10 +22,10 @@ public class InMemoryDatabase implements Database {
 
   @Override
   public int saveInvoice(Invoice invoice) {
-      invoices
-          .put(++id, new Invoice(id, invoice.getIdentifier(), invoice.getIssuedDate(),
-              invoice.getBuyer(), invoice.getSeller(), invoice.getEntries()));
-      logger.info("Saved invoice with id = " + id);
+    invoices
+        .put(++id, new Invoice(id, invoice.getIdentifier(), invoice.getIssuedDate(),
+            invoice.getBuyer(), invoice.getSeller(), invoice.getEntries()));
+    logger.info("Saved invoice with id = " + id);
     return id;
 
   }
