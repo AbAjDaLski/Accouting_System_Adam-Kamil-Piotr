@@ -27,7 +27,7 @@ public class InvoiceService {
       + " invoice with given ID : ";
   public static final String CANNOT_REMOVE_AN_INVOICE_WITH_GIVEN_ID_MESSAGE = "Cannot remove: An"
       + " invoice with given ID : ";
-  public static final  String WRONG_BUYER_OR_SELLER_MESSAGE = "Invoice can be issued on buyer or seller";
+  public static final String WRONG_BUYER_OR_SELLER_MESSAGE = "Invoice can be issued on buyer or seller";
 
   private static Logger logger = LoggerFactory.getLogger(InMemoryDatabase.class);
 
@@ -41,7 +41,6 @@ public class InvoiceService {
   }
 
   public int saveInvoice(Invoice invoice) {
-
     return database.saveInvoice(invoice);
   }
 

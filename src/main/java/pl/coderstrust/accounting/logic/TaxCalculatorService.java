@@ -32,8 +32,7 @@ public class TaxCalculatorService {
     for (Invoice invoice : database.getAll()) {
       for (InvoiceEntry entry : invoice.getEntries()) {
         if (getCompanyFunction.apply(invoice).getTaxId().equals(MY_COMPANY_TAX_ID)) {
-          sum = sum
-              .add(getValueFunction.apply(entry));
+          sum = sum.add(getValueFunction.apply(entry));
         }
       }
     }

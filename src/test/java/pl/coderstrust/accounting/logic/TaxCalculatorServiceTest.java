@@ -38,7 +38,6 @@ public class TaxCalculatorServiceTest {
       Arrays.asList(InvoiceHelper.getSampleInvoiceWithId0(),
           InvoiceHelper.getSampleInvoiceWithId1(), InvoiceHelper.getSampleInvoiceWithId2(),
           InvoiceHelper.getSampleInvoiceWithId3(), InvoiceHelper.getSampleInvoiceWithId4())
-
   );
 
   @Parameters(method = "ParametersForShouldCalculateRevenuesWhenInvoicesBooked")
@@ -85,16 +84,13 @@ public class TaxCalculatorServiceTest {
   @Test
   public void shouldCalculateVatReceivableWhenInvoicesBooked(List sampleDatabase) {
 
-    //given
-    BigDecimal expected = BigDecimal.valueOf(5.2);
-
     //when
     when(databaseMock.getAll()).thenReturn(sampleDatabase);
     BigDecimal actual = taxCalculatorService.getVatReceivable();
 
     //then
+    BigDecimal expected = BigDecimal.valueOf(5.2);
     assertEquals(expected.setScale(2, RoundingMode.CEILING), actual);
-
   }
 
   private List<List<Invoice>> ParametersForShouldCalculateVatReceivableWhenInvoicesBooked() {
@@ -118,7 +114,6 @@ public class TaxCalculatorServiceTest {
   }
 
   private List<List<Invoice>> ParametersForShouldCalculateVatPayableWhenInvoicesBooked() {
-
     return parameters;
   }
 }

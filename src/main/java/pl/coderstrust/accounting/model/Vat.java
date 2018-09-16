@@ -11,7 +11,7 @@ import javax.persistence.Id;
 
 @Entity
 public enum Vat {
-  REGULAR(BigDecimal.valueOf(23)), REDUCED1(BigDecimal.valueOf(8)), REDUCED2(BigDecimal.valueOf(5)), ZERO(BigDecimal.valueOf(0));
+  REGULAR_23(BigDecimal.valueOf(23)), REDUCED_8(BigDecimal.valueOf(8)), REDUCED_5(BigDecimal.valueOf(5)), ZERO(BigDecimal.valueOf(0));
 
   Vat(BigDecimal rate) {
     this.rate = rate;
@@ -25,8 +25,7 @@ public enum Vat {
   public static Vat fromValue(BigDecimal value) {
     return Arrays.stream(Vat.values())
         .filter(status -> status.getValue().equals(value))
-        .findFirst()
-        .orElse(null);
+        .findFirst().orElse(null);
   }
 
   @JsonValue

@@ -1,5 +1,6 @@
 package pl.coderstrust.accounting.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,9 +9,10 @@ import pl.coderstrust.accounting.logic.TaxCalculatorService;
 import java.math.BigDecimal;
 
 @RestController
-@RequestMapping("/calculation")
+@RequestMapping("/taxes")
 public class TaxCalculatorController {
 
+  @Autowired
   private TaxCalculatorService taxCalculatorService;
 
   public TaxCalculatorController(TaxCalculatorService taxCalculatorService) {

@@ -23,7 +23,7 @@ public class InvoiceEntryValidatorTest {
   @Test
   public void shouldCheckIfDescriptionFieldIsNotNull() {
 
-    InvoiceEntry testInvoiceEntry = new InvoiceEntry(null, BigDecimal.TEN, Vat.REGULAR);
+    InvoiceEntry testInvoiceEntry = new InvoiceEntry(null, BigDecimal.TEN, Vat.REGULAR_23);
 
     Collection<String> result = invoiceEntryValidator
         .validate(testInvoiceEntry);
@@ -36,7 +36,7 @@ public class InvoiceEntryValidatorTest {
   @Test
   public void shouldCheckIfPriceFieldIsNotNull() {
 
-    InvoiceEntry testInvoiceEntry = new InvoiceEntry("description", null, Vat.REGULAR);
+    InvoiceEntry testInvoiceEntry = new InvoiceEntry("description", null, Vat.REGULAR_23);
 
     Collection<String> result = invoiceEntryValidator
         .validate(testInvoiceEntry);
