@@ -3,6 +3,7 @@ package pl.coderstrust.accounting.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,26 +11,25 @@ import javax.persistence.Id;
 
 @Entity
 public enum Vat {
-  REGULAR(23), REDUCED1(8), REDUCED2(5), ZERO(0);
+  REGULAR_23(BigDecimal.valueOf(23)), REDUCED_8(BigDecimal.valueOf(8)), REDUCED_5(BigDecimal.valueOf(5)), ZERO(BigDecimal.valueOf(0));
 
-  Vat(int rate) {
+  Vat(BigDecimal rate) {
     this.rate = rate;
   }
 
   @Id
   @GeneratedValue
-  private final int rate;
+  private final BigDecimal rate;
 
   @JsonCreator
-  public static Vat fromValue(int value) {
+  public static Vat fromValue(BigDecimal value) {
     return Arrays.stream(Vat.values())
-        .filter(status -> status.getValue() == value)
-        .findFirst()
-        .orElse(null);
+        .filter(status -> status.getValue().equals(value))
+        .findFirst().orElse(null);
   }
 
   @JsonValue
-  public int getValue() {
+  public BigDecimal getValue() {
     return rate;
   }
 }

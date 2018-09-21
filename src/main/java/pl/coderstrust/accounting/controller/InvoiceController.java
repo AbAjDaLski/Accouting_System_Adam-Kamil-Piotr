@@ -63,7 +63,7 @@ public class InvoiceController {
       @ApiResponse(code = 400, message = "Bad format date, use number"),
       @ApiResponse(code = 404, message = "Invoice is not exist")})
   @GetMapping("/{id}")
-  public ResponseEntity<?> findSingleIvoiceById(
+  public ResponseEntity<?> findInvoiceById(
       @PathVariable(name = "id", required = true) int id) {
     Optional<Invoice> invoiceOptional = invoiceService.findById(id);
     return invoiceOptional.isPresent()
@@ -80,7 +80,7 @@ public class InvoiceController {
       @ApiResponse(code = 403, message = "Access forbidden "),
       @ApiResponse(code = 404, message = "Invoices is not exist")})
   @GetMapping("{dateFrom}/{dateTo}")
-  public Collection<Invoice> findSingleIvoiceByDateRange(
+  public Collection<Invoice> findSingleInvoice(
       @PathVariable("dateFrom") @DateTimeFormat(iso = ISO.DATE) LocalDate dateFrom,
       @PathVariable("dateTo") @DateTimeFormat(iso = ISO.DATE) LocalDate dateTo) {
     logger.info("Received find invoices withing set date range request");

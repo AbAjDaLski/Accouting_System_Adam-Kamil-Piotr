@@ -27,6 +27,7 @@ public class InMemoryDatabase implements Database {
             invoice.getBuyer(), invoice.getSeller(), invoice.getEntries()));
     logger.info("Saved invoice with id = " + id);
     return id;
+
   }
 
   @Override

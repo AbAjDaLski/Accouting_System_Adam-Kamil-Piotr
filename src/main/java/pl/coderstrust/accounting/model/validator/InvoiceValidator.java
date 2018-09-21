@@ -44,7 +44,7 @@ public class InvoiceValidator {
   private List<InvoiceValidationException> validate(Invoice invoice, boolean checkForId) {
     List<InvoiceValidationException> validationExceptions = new LinkedList<>();
     if (checkForId) {
-      if (invoice.getId() == null && checkForId) {
+      if (invoice.getId() == null) {
         logger.error(EXPECTED_NOT_EMPTY_ID);
         validationExceptions.add(new InvoiceValidationException(EXPECTED_NOT_EMPTY_ID));
       } else {
