@@ -51,7 +51,7 @@ public class CreatingTable {
   }
 
   public CreatingTable setLandscape(boolean landscape) {
-    table.setLandScape(landscape);
+    table.setLandscape(landscape);
     return this;
   }
 

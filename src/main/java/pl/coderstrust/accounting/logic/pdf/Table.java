@@ -7,33 +7,22 @@ import java.util.List;
 
 public class Table {
 
-  private PDRectangle pageSize;
   private float margin;
   private float height;
+  private PDRectangle pageSize;
+  private boolean isLandscape;
   private float rowHeight;
-  private boolean isLandScape;
-
-  private List<Column> columns;
-  private Integer numberOfRows;
-  private float cellMargin;
-  private String [][] content;
 
   private PDFont pdfTextFont;
   private float fontSize;
 
-  public Table() {
-  }
+  private Integer numberOfRows;
+  private List<Column> columns;
+  private String[][] content;
+  private float cellMargin;
 
   public Integer getNumberOfColumns() {
     return this.getColumns().size();
-  }
-
-  public String[] getColumnsNames() {
-    String[] columnNames = new String[getNumberOfColumns()];
-    for (int i = 0; i < getNumberOfColumns() - 1; i++) {
-      columnNames[i] = columns.get(i).getName();
-    }
-    return columnNames;
   }
 
   public float getWidth() {
@@ -44,14 +33,6 @@ public class Table {
     return tableWidth;
   }
 
-  public PDRectangle getPageSize() {
-    return pageSize;
-  }
-
-  public void setPageSize(PDRectangle pageSize) {
-    this.pageSize = pageSize;
-  }
-
   public float getMargin() {
     return margin;
   }
@@ -60,28 +41,36 @@ public class Table {
     this.margin = margin;
   }
 
-  public float getHeight() {
-    return height;
+  public PDRectangle getPageSize() {
+    return pageSize;
   }
 
-  public void setHeight(float height) {
-    this.height = height;
+  public void setPageSize(PDRectangle pageSize) {
+    this.pageSize = pageSize;
   }
 
-  public float getRowHeight() {
-    return rowHeight;
+  public PDFont getPdfTextFont() {
+    return pdfTextFont;
   }
 
-  public void setRowHeight(float rowHeight) {
-    this.rowHeight = rowHeight;
+  public void setPdfTextFont(PDFont pdfTextFont) {
+    this.pdfTextFont = pdfTextFont;
   }
 
-  public boolean isLandScape() {
-    return isLandScape;
+  public float getFontSize() {
+    return fontSize;
   }
 
-  public void setLandScape(boolean landScape) {
-    isLandScape = landScape;
+  public void setFontSize(float fontSize) {
+    this.fontSize = fontSize;
+  }
+
+  public String[] getColumnsNamesAsArray() {
+    String[] columnNames = new String[getNumberOfColumns()];
+    for (int i = 0; i < getNumberOfColumns() - 1; i++) {
+      columnNames[i] = columns.get(i).getName();
+    }
+    return columnNames;
   }
 
   public List<Column> getColumns() {
@@ -100,12 +89,20 @@ public class Table {
     this.numberOfRows = numberOfRows;
   }
 
-  public float getCellMargin() {
-    return cellMargin;
+  public float getHeight() {
+    return height;
   }
 
-  public void setCellMargin(float cellMargin) {
-    this.cellMargin = cellMargin;
+  public void setHeight(float height) {
+    this.height = height;
+  }
+
+  public float getRowHeight() {
+    return rowHeight;
+  }
+
+  public void setRowHeight(float rowHeight) {
+    this.rowHeight = rowHeight;
   }
 
   public String[][] getContent() {
@@ -116,19 +113,19 @@ public class Table {
     this.content = content;
   }
 
-  public PDFont getPdfTextFont() {
-    return pdfTextFont;
+  public float getCellMargin() {
+    return cellMargin;
   }
 
-  public void setPdfTextFont(PDFont pdfTextFont) {
-    this.pdfTextFont = pdfTextFont;
+  public void setCellMargin(float cellMargin) {
+    this.cellMargin = cellMargin;
   }
 
-  public float getFontSize() {
-    return fontSize;
+  public boolean isLandScape() {
+    return isLandscape;
   }
 
-  public void setFontSize(float fontSize) {
-    this.fontSize = fontSize;
+  public void setLandscape(boolean isLandscape) {
+    this.isLandscape = isLandscape;
   }
 }
