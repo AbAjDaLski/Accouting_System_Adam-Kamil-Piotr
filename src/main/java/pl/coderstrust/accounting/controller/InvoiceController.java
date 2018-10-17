@@ -6,8 +6,10 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,12 +18,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import pl.coderstrust.accounting.logic.InvoiceService;
+import pl.coderstrust.accounting.logic.pdf.PdfService;
+import pl.coderstrust.accounting.logic.pdf.PdfSet;
 import pl.coderstrust.accounting.model.Invoice;
 import pl.coderstrust.accounting.model.validator.InvoiceValidator;
 import pl.coderstrust.accounting.model.validator.exception.InvoiceValidationException;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Optional;
@@ -35,10 +41,12 @@ public class InvoiceController {
 
   private InvoiceService invoiceService;
   private InvoiceValidator invoiceValidator;
+  private PdfService invoicePdf;
 
-  public InvoiceController(InvoiceService invoiceService, InvoiceValidator invoiceValidator) {
+  public InvoiceController(InvoiceService invoiceService, InvoiceValidator invoiceValidator, PdfService invoicePdf) {
     this.invoiceService = invoiceService;
     this.invoiceValidator = invoiceValidator;
+    this.invoicePdf = invoicePdf;
   }
 
   @ApiOperation(value = "Find all invoices",
@@ -151,6 +159,21 @@ public class InvoiceController {
       return ResponseEntity.badRequest().body(validationErrors);
     }
     invoiceService.updateInvoice(invoice);
+    return ResponseEntity.ok().build();
+  }
+
+  @RequestMapping(value = "pdf/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_PDF_VALUE)
+  @ApiOperation(value = "Returns invoice in pdf format")
+  public ResponseEntity<InputStreamResource> invoicePdf(@PathVariable("id") int id) {
+    Optional<Invoice> invoiceFromDatabase = invoiceService.findById(id);
+    if (!invoiceFromDatabase.isPresent()) {
+      return ResponseEntity.notFound().build();
+    }
+    try {
+      new PdfService().generatePdf(PdfSet.createContent(invoiceFromDatabase.get()));
+    } catch (IOException ioex) {
+      ioex.printStackTrace();
+    }
     return ResponseEntity.ok().build();
   }
 }
