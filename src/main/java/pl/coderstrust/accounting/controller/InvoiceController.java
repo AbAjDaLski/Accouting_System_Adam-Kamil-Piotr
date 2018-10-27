@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.MediaType;
@@ -27,6 +26,7 @@ import pl.coderstrust.accounting.model.Invoice;
 import pl.coderstrust.accounting.model.validator.InvoiceValidator;
 import pl.coderstrust.accounting.model.validator.exception.InvoiceValidationException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -164,13 +164,14 @@ public class InvoiceController {
 
   @RequestMapping(value = "pdf/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_PDF_VALUE)
   @ApiOperation(value = "Returns invoice in pdf format")
-  public ResponseEntity<InputStreamResource> invoicePdf(@PathVariable("id") int id) {
+  public ResponseEntity<byte[]> invoicePdf(@PathVariable("id") int id) {
     Optional<Invoice> invoiceFromDatabase = invoiceService.findById(id);
     if (!invoiceFromDatabase.isPresent()) {
       return ResponseEntity.notFound().build();
     }
     try {
-      new PdfService().generatePdf(PdfSet.createContent(invoiceFromDatabase.get()));
+      ByteArrayOutputStream arrayOutputStream = new PdfService().generatePdf(PdfSet.createContent(invoiceFromDatabase.get()));
+      return ResponseEntity.ok(arrayOutputStream.toByteArray());
     } catch (IOException ioex) {
       ioex.printStackTrace();
     }
