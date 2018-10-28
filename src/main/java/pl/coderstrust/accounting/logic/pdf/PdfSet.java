@@ -4,40 +4,39 @@ package pl.coderstrust.accounting.logic.pdf;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import pl.coderstrust.accounting.model.Invoice;
+import pl.coderstrust.accounting.model.InvoiceEntry;
+import pl.coderstrust.accounting.model.Vat;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class PdfSet {
 
   private static final PDRectangle PAGE_SIZE = PDRectangle.A4;
-  private static final float MARGIN = 20;
+  private static final float MARGIN = 150;
   private static final boolean IS_LANDSCAPE = true;
 
   private static final PDFont TEXT_FONT = PDType1Font.HELVETICA;
   private static final float FONT_SIZE = 10;
 
-  private static final float ROW_HEIGHT = 15;
-  private static final float CELL_MARGIN = 2;
+  private static final float ROW_HEIGHT = 30;
+  private static final float CELL_MARGIN = 4;
 
-  public static void main(String[] args) throws IOException {
-    new PdfWithTableGenerate().generatePdf(createContent());
-  }
+  public static Table createContent(Invoice invoice) throws IOException {
 
-  private static Table createContent() {
-
+    invoice.getEntries().add(new InvoiceEntry("Computer", BigDecimal.TEN, Vat.REGULAR_23));
     ArrayList<Column> columns = new ArrayList<Column>();
-    columns.add(new Column("id", 100));
-    columns.add(new Column("identifier", 100));
-    columns.add(new Column("issuedDate", 230));
-    columns.add(new Column("buyer", 43));
-    columns.add(new Column("seller", 50));
-    columns.add(new Column("entries", 80));
+    columns.add(new Column("description", 200));
+    columns.add(new Column("price", 100));
+    columns.add(new Column("vat", 80));
 
     String[][] content = {
-        {"id", "identifier", "issuedDate", "buyer", "seller", "entries"},
-        {"id", "identifier", "issuedDate", "buyer", "seller", "entries"},
-        {"id", "identifier", "issuedDate", "buyer", "seller", "entries"}
+        {invoice.getEntries().get(0).getDescription(),
+            String.valueOf(invoice.getEntries().get(0).getPrice()),
+            String.valueOf(invoice.getEntries().get(0).getVat()),
+        },
     };
 
     float tableHeight =
@@ -56,6 +55,7 @@ public class PdfSet {
         .setTextFont(TEXT_FONT)
         .setFontSize(FONT_SIZE)
         .build();
+
     return table;
   }
 }
