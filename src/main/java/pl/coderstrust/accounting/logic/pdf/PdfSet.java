@@ -5,17 +5,14 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import pl.coderstrust.accounting.model.Invoice;
-import pl.coderstrust.accounting.model.InvoiceEntry;
-import pl.coderstrust.accounting.model.Vat;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class PdfSet {
 
   private static final PDRectangle PAGE_SIZE = PDRectangle.A4;
-  private static final float MARGIN = 150;
+  private static final float MARGIN = 250;
   private static final boolean IS_LANDSCAPE = true;
 
   private static final PDFont TEXT_FONT = PDType1Font.HELVETICA;
@@ -26,7 +23,6 @@ public class PdfSet {
 
   public static Table createContent(Invoice invoice) throws IOException {
 
-    invoice.getEntries().add(new InvoiceEntry("Computer", BigDecimal.TEN, Vat.REGULAR_23));
     ArrayList<Column> columns = new ArrayList<Column>();
     columns.add(new Column("description", 200));
     columns.add(new Column("price", 100));
