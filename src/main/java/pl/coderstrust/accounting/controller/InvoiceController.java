@@ -170,7 +170,8 @@ public class InvoiceController {
       return ResponseEntity.notFound().build();
     }
     try {
-      ByteArrayOutputStream arrayOutputStream = new PdfService().generatePdf(PdfSet.createContent(invoiceFromDatabase.get()), invoiceFromDatabase.get());
+      ByteArrayOutputStream arrayOutputStream = new PdfService().generatePdf(PdfSet.createContent(
+          invoiceFromDatabase.get()), invoiceFromDatabase.get());
       return ResponseEntity.ok(arrayOutputStream.toByteArray());
     } catch (IOException ioex) {
       ioex.printStackTrace();
