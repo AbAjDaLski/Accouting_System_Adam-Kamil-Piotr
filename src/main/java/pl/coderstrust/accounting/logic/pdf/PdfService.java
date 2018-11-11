@@ -22,7 +22,7 @@ public class PdfService {
     try {
       doc = new PDDocument();
       drawTable(doc, table, invoice);
-      doc.save("invoice.pdf");
+      doc.save("invoice3.pdf");
       ByteArrayOutputStream output = new ByteArrayOutputStream();
       doc.save(output);
       return output;
@@ -137,27 +137,30 @@ public class PdfService {
     contentStream.setFont(PDType1Font.TIMES_BOLD, 30);
     contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 50, 350));
     contentStream.showText("INVOICE");
-    contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
     contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 100, 60));
+    contentStream.setFont(PDType1Font.TIMES_BOLD, 17);
+    contentStream.showText("SELLER");
+    leadingWithNewLine(contentStream, 20);
+    contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
     contentStream.showText(String.valueOf(invoice.getSeller().getName()));
-    leadingWithNewLine(contentStream,20);
+    leadingWithNewLine(contentStream, 20);
     contentStream.showText(String.valueOf(invoice.getSeller().getStreetAndNumber()));
-    leadingWithNewLine(contentStream,20);
+    leadingWithNewLine(contentStream, 20);
     contentStream.showText(String.valueOf(invoice.getSeller().getPostalCode() + " " + invoice.getSeller().getLocation()));
     contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
     contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 100, 600));
     contentStream.showText("Invoice # : " + invoice.getIdentifier());
-    leadingWithNewLine(contentStream,20);
+    leadingWithNewLine(contentStream, 20);
     contentStream.showText(String.valueOf("Invoice date : " + invoice.getIssuedDate()));
     contentStream.setFont(PDType1Font.TIMES_BOLD, 17);
-    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 180, 60));
+    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 200, 60));
     contentStream.showText("BILL TO");
-    leadingWithNewLine(contentStream,20);
+    leadingWithNewLine(contentStream, 20);
     contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
     contentStream.showText(String.valueOf(invoice.getBuyer().getName()));
-    leadingWithNewLine(contentStream,20);
+    leadingWithNewLine(contentStream, 20);
     contentStream.showText(String.valueOf(invoice.getBuyer().getStreetAndNumber()));
-    leadingWithNewLine(contentStream,20);
+    leadingWithNewLine(contentStream, 20);
     contentStream.showText(String.valueOf(invoice.getBuyer().getPostalCode() + " " + invoice.getBuyer().getLocation()));
     contentStream.endText();
     contentStream.close();
@@ -169,7 +172,7 @@ public class PdfService {
     return contentStream;
   }
 
-  private static void leadingWithNewLine(PDPageContentStream contentStream,double leading) throws IOException {
+  private static void leadingWithNewLine(PDPageContentStream contentStream, double leading) throws IOException {
     contentStream.setLeading(leading);
     contentStream.newLine();
   }
