@@ -22,7 +22,7 @@ public class PdfService {
     try {
       doc = new PDDocument();
       drawTable(doc, table, invoice);
-      doc.save("invoice3.pdf");
+      doc.save("invoice.pdf");
       ByteArrayOutputStream output = new ByteArrayOutputStream();
       doc.save(output);
       return output;

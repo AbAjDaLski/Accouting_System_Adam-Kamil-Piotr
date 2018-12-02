@@ -5,11 +5,9 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import pl.coderstrust.accounting.model.Invoice;
-import pl.coderstrust.accounting.model.InvoiceEntry;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PdfSet {
 
@@ -30,18 +28,14 @@ public class PdfSet {
     columns.add(new Column("price", 100));
     columns.add(new Column("vat", 80));
 
-    List<String[]> collectRow = new ArrayList<>();
-    List<InvoiceEntry> contentInvoice = invoice.getEntries();
-    for (InvoiceEntry invoiceEntry : contentInvoice) {
+    String[][] content = new String[invoice.getEntries().size()][3];
+
+    for (int i = 0; i < invoice.getEntries().size(); i++) {
       String[] collectDataItem = new String[3];
-      collectDataItem[0] = invoiceEntry.getDescription();
-      collectDataItem[1] = invoiceEntry.getPrice().toString();
-      collectDataItem[2] = invoiceEntry.getVat().getValue().toString() + " %";
-      collectRow.add(collectDataItem);
-    }
-    String[][] content = new String[collectRow.size()][3];
-    for (int i = 0; i < collectRow.size(); i++) {
-      content[i] = collectRow.get(i);
+      collectDataItem[0] = invoice.getEntries().get(i).getDescription();
+      collectDataItem[1] = invoice.getEntries().get(i).getPrice().toString();
+      collectDataItem[2] = invoice.getEntries().get(i).getVat().getValue().toString() + " %";
+      content[i] = collectDataItem;
     }
 
     float tableHeight =
