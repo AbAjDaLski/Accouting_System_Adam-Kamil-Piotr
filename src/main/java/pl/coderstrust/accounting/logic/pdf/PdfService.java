@@ -135,9 +135,9 @@ public class PdfService {
     PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.APPEND, false);
     contentStream.beginText();
     contentStream.setFont(PDType1Font.TIMES_BOLD, 30);
-    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 50, 350));
+    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 50, 230));
     contentStream.showText("INVOICE");
-    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 100, 60));
+    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 100, 50));
     contentStream.setFont(PDType1Font.TIMES_BOLD, 17);
     contentStream.showText("SELLER");
     leadingWithNewLine(contentStream, 20);
@@ -148,12 +148,12 @@ public class PdfService {
     leadingWithNewLine(contentStream, 20);
     contentStream.showText(String.valueOf(invoice.getSeller().getPostalCode() + " " + invoice.getSeller().getLocation()));
     contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
-    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 100, 600));
+    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 100, 400));
     contentStream.showText("Invoice # : " + invoice.getIdentifier());
     leadingWithNewLine(contentStream, 20);
     contentStream.showText(String.valueOf("Invoice date : " + invoice.getIssuedDate()));
     contentStream.setFont(PDType1Font.TIMES_BOLD, 17);
-    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 200, 60));
+    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 190, 50));
     contentStream.showText("BILL TO");
     leadingWithNewLine(contentStream, 20);
     contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
@@ -166,7 +166,7 @@ public class PdfService {
     contentStream.close();
 
     if (table.isLandScape()) {
-      contentStream.transform(new Matrix(0, 1, -1, 0, table.getPageSize().getWidth() + 50, 0));
+      contentStream.transform(new Matrix(0, 1, -1, 0, table.getPageSize().getWidth() + 200, 0));
     }
     contentStream.setFont(table.getPdfTextFont(), table.getFontSize());
     return contentStream;
