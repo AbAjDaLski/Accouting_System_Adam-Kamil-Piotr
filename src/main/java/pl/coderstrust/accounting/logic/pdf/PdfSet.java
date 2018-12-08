@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 public class PdfSet {
 
-  private static final PDRectangle PAGE_SIZE = PDRectangle.A4;
-  private static final float MARGIN = 250;
+  private static final PDRectangle PAGE_SIZE = new PDRectangle(841.8898F, 595.27563F);
+  private static final float MARGIN = 100;
   private static final boolean IS_LANDSCAPE = true;
 
   private static final PDFont TEXT_FONT = PDType1Font.HELVETICA;
