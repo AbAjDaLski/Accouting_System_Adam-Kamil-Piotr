@@ -7,12 +7,13 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import pl.coderstrust.accounting.model.Invoice;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class PdfSet {
 
   private static final PDRectangle PAGE_SIZE = new PDRectangle(841.8898F, 595.27563F);
-  private static final float MARGIN = 100;
+  private static final float MARGIN = 50;
   private static final boolean IS_LANDSCAPE = true;
 
   private static final PDFont TEXT_FONT = PDType1Font.HELVETICA;
@@ -24,17 +25,30 @@ public class PdfSet {
   public static Table createContent(Invoice invoice) throws IOException {
 
     ArrayList<Column> columns = new ArrayList<Column>();
-    columns.add(new Column("description", 200));
-    columns.add(new Column("price", 100));
-    columns.add(new Column("vat", 80));
+    columns.add(new Column("no.", 20));
+    columns.add(new Column("description", 150));
+    columns.add(new Column("net price", 80));
+    columns.add(new Column("vat", 40));
+    columns.add(new Column("value vat", 60));
+    columns.add(new Column("gross price", 80));
 
-    String[][] content = new String[invoice.getEntries().size()][3];
+    String[][] content = new String[invoice.getEntries().size()][6];
 
     for (int i = 0; i < invoice.getEntries().size(); i++) {
-      String[] collectDataItem = new String[3];
-      collectDataItem[0] = invoice.getEntries().get(i).getDescription();
-      collectDataItem[1] = invoice.getEntries().get(i).getPrice().toString();
-      collectDataItem[2] = invoice.getEntries().get(i).getVat().getValue().toString() + " %";
+
+      BigDecimal hundred = new BigDecimal("100");
+      BigDecimal netPrice = invoice.getEntries().get(i).getPrice();
+      BigDecimal valueVat = invoice.getEntries().get(i).getVat().getValue();
+      BigDecimal valueTax = ((netPrice.multiply(valueVat))).divide(hundred);
+      String[] collectDataItem = new String[6];
+
+      collectDataItem[0] = Integer.toString(i + 1);
+      collectDataItem[1] = invoice.getEntries().get(i).getDescription();
+      collectDataItem[2] = netPrice.toString();
+      collectDataItem[3] = valueVat.toString() + " %";
+      collectDataItem[4] = String
+          .valueOf(valueTax);
+      collectDataItem[5] = String.valueOf(netPrice.add(valueTax));
       content[i] = collectDataItem;
     }
 
