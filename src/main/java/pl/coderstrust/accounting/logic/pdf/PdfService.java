@@ -166,7 +166,7 @@ public class PdfService {
     contentStream.close();
 
     if (table.isLandScape()) {
-      contentStream.transform(new Matrix(0, 1, -1, 0, table.getPageSize().getWidth() + 200, 0));
+      contentStream.transform(new Matrix(0, 1, -1, 0, table.getPageSize().getWidth() + 250, 0));
     }
     contentStream.setFont(table.getPdfTextFont(), table.getFontSize());
     return contentStream;
