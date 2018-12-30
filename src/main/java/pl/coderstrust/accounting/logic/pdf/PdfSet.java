@@ -5,6 +5,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import pl.coderstrust.accounting.model.Invoice;
+import pl.coderstrust.accounting.model.InvoiceEntry;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -29,28 +30,39 @@ public class PdfSet {
     columns.add(new Column("description", 150));
     columns.add(new Column("net price", 80));
     columns.add(new Column("vat", 40));
-    columns.add(new Column("value vat", 60));
+    columns.add(new Column("value vat", 80));
     columns.add(new Column("gross price", 80));
 
-    String[][] content = new String[invoice.getEntries().size()][6];
+    String[][] content = new String[invoice.getEntries().size() + 1][6];
+
+    BigDecimal totalGrossValue = BigDecimal.ZERO;
+    BigDecimal netPrice = BigDecimal.ZERO;
+    BigDecimal valueVat = BigDecimal.ZERO;
+    BigDecimal valueTax = BigDecimal.ZERO;
 
     for (int i = 0; i < invoice.getEntries().size(); i++) {
-
-      BigDecimal hundred = new BigDecimal("100");
-      BigDecimal netPrice = invoice.getEntries().get(i).getPrice();
-      BigDecimal valueVat = invoice.getEntries().get(i).getVat().getValue();
-      BigDecimal valueTax = ((netPrice.multiply(valueVat))).divide(hundred);
       String[] collectDataItem = new String[6];
+      netPrice = invoice.getEntries().get(i).getPrice();
 
       collectDataItem[0] = Integer.toString(i + 1);
       collectDataItem[1] = invoice.getEntries().get(i).getDescription();
       collectDataItem[2] = netPrice.toString();
+      valueVat = invoice.getEntries().get(i).getVat().getValue();
       collectDataItem[3] = valueVat.toString() + " %";
-      collectDataItem[4] = String
-          .valueOf(valueTax);
+      BigDecimal hundred = new BigDecimal("100");
+      valueTax = ((netPrice.multiply(valueVat))).divide(hundred);
+      totalGrossValue = totalGrossValue.add(valueTax);
+      collectDataItem[4] = String.valueOf(valueTax);
       collectDataItem[5] = String.valueOf(netPrice.add(valueTax));
       content[i] = collectDataItem;
     }
+
+    content[content.length - 1][0] = null;
+    content[content.length - 1][1] = "Total Value";
+    content[content.length - 1][2] = getTotalNetValue(invoice).toString() + " PLN";
+    content[content.length - 1][3] = null;
+    content[content.length - 1][4] = totalGrossValue.toString() + " PLN";
+    content[content.length - 1][5] = getTotalGrossValue(invoice).toString() + " PLN";
 
     float tableHeight =
         IS_LANDSCAPE ? PAGE_SIZE.getWidth() - (2 * MARGIN) : PAGE_SIZE.getHeight() - (2 * MARGIN);
@@ -70,5 +82,23 @@ public class PdfSet {
         .build();
 
     return table;
+  }
+
+  private static BigDecimal getTotalNetValue(Invoice invoice) {
+    BigDecimal totalNetPrice = BigDecimal.ZERO;
+
+    for (InvoiceEntry entry : invoice.getEntries()) {
+      totalNetPrice = totalNetPrice.add(entry.getPrice());
+    }
+    return totalNetPrice;
+  }
+
+  private static BigDecimal getTotalGrossValue(Invoice invoice) {
+    BigDecimal grossPriceTotal = BigDecimal.ZERO;
+
+    for (InvoiceEntry entry : invoice.getEntries()) {
+      grossPriceTotal = grossPriceTotal.add(entry.getPrice().multiply(entry.getVat().getValue().divide(BigDecimal.valueOf(100)).add(BigDecimal.ONE)));
+    }
+    return grossPriceTotal.setScale(2);
   }
 }
