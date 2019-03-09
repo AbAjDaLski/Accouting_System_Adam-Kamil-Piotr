@@ -16,13 +16,13 @@ import java.util.Arrays;
 @Service
 public class PdfService {
 
-  public ByteArrayOutputStream generatePdf(Table table, Invoice invoice) throws IOException {
+  public ByteArrayOutputStream generatePdf(Table table, Invoice invoice, String nameFile) throws IOException {
     PDDocument doc = null;
 
     try {
       doc = new PDDocument();
       drawTable(doc, table, invoice);
-      doc.save("invoice1.pdf");
+      doc.save(nameFile);
       ByteArrayOutputStream output = new ByteArrayOutputStream();
       doc.save(output);
       return output;

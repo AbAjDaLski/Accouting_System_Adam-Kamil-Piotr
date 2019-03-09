@@ -87,6 +87,7 @@
                   </limits>
                   <excludes>
                     <exclude>database.impl.ConfigurationProvider</exclude>
+                    <exclude>logic.pdf.CreatingTable</exclude>
                   </excludes>
                 </rule>
               </rules>

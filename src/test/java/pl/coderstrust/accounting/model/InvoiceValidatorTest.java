@@ -81,8 +81,7 @@ public class InvoiceValidatorTest {
         .validateInvoiceForUpdate(testInvoice);
 
     assertNotNull(result);
-    assertEquals(1, result.size());
-    assertTrue(result.iterator().next().getMessage().contains("date"));
+    assertEquals(0, result.size());
   }
 
   @Test
