@@ -241,4 +241,21 @@ public class InvoiceHelper {
     return simpleInvoiceId7Json;
   }
 
+  public static Invoice getSampleInvoiceWithId41() {
+    Company buyer = new Company("Logitech", "7664369891", "ul. Kochanowskiego 5", "62-800",
+        "Kalisz");
+    Company seller = new Company("ComputerTech", "7894369785", "ul. Wisniowa 5",
+        "00-055",
+        "Warszawa");
+    return new Invoice(41, "FV/2018/11/04", LocalDate.of(2018, Month.NOVEMBER, 4), buyer, seller,
+        InvoiceHelper.getSampleInvoiceEntriesList());
+  }
+
+  public static List<InvoiceEntry> getSampleInvoiceEntriesList() {
+    List<InvoiceEntry> entries = new ArrayList<>();
+    entries.add(new InvoiceEntry("computer", BigDecimal.valueOf(300000, 2), Vat.REGULAR_23));
+    entries.add(new InvoiceEntry("LCD monitor", BigDecimal.valueOf(250000, 2), Vat.REGULAR_23));
+    entries.add(new InvoiceEntry("laptop", BigDecimal.valueOf(350000, 2), Vat.REGULAR_23));
+    return entries;
+  }
 }
