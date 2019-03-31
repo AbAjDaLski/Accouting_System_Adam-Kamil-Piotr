@@ -1,13 +1,11 @@
 package pl.coderstrust.accounting.logic.pdf;
 
-import org.apache.commons.io.FileUtils;
+import com.testautomationguru.utility.PDFUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import pl.coderstrust.accounting.helpers.InvoiceHelper;
 import pl.coderstrust.accounting.model.Invoice;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 
 public class PdfServiceTest {
@@ -16,13 +14,14 @@ public class PdfServiceTest {
   public void shouldCheckGenerateRightPdfFile() throws IOException {
 
     //given
+    PDFUtil pdfUtil = new PDFUtil();
     Invoice givenInvoice = InvoiceHelper.getSampleInvoiceWithId41();
     Table givenTable = PdfSet.createContent(givenInvoice);
 
     //when
-    ByteArrayOutputStream invoiceActualPdf = new PdfService().generatePdf(givenTable, givenInvoice, "outputInvoicePdf.pdf");
+    new PdfService().generatePdf(givenTable, givenInvoice, "src\\test\\resources\\outputInvoicePdf.pdf");
 
     //then
-    Assert.assertTrue(FileUtils.contentEquals(new File("invoice.pdf"), new File("outputInvoicePdf.pdf")));
+    Assert.assertTrue(pdfUtil.compare("invoice.pdf", "src\\test\\resources\\outputInvoicePdf.pdf"));
   }
 }

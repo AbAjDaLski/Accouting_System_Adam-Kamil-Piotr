@@ -86,8 +86,8 @@
                     </limit>
                   </limits>
                   <excludes>
-                    <exclude>database.impl.ConfigurationProvider</exclude>
-                    <exclude>logic.pdf.CreatingTable</exclude>
+                    <exclude>database.impl.ConfigurationProvider.*</exclude>
+                    <exclude>logic.pdf.CreatingTable.*</exclude>
                   </excludes>
                 </rule>
               </rules>
@@ -189,6 +189,11 @@
       <groupId>net.sf.cssbox</groupId>
       <artifactId>pdf2dom</artifactId>
       <version>1.6</version>
+    </dependency>
+    <dependency>
+      <groupId>com.testautomationguru.pdfutil</groupId>
+      <artifactId>pdf-util</artifactId>
+      <version>0.0.1</version>
     </dependency>
   </dependencies>
 </project>
