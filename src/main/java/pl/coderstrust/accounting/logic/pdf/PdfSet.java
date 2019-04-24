@@ -25,15 +25,33 @@ public class PdfSet {
 
   public static Table createContent(Invoice invoice) throws IOException {
 
-    ArrayList<Column> columns = new ArrayList<Column>();
-    columns.add(new Column("no.", 20));
-    columns.add(new Column("description", 150));
-    columns.add(new Column("net price", 80));
-    columns.add(new Column("vat", 40));
-    columns.add(new Column("value vat", 80));
-    columns.add(new Column("gross price", 80));
-
     String[][] content = new String[invoice.getEntries().size() + 1][6];
+
+    ArrayList<Column> columns = createColumnHeaders();
+    BigDecimal totalGrossValue = contentTableItems(invoice, content);
+    totalValues(invoice, content, totalGrossValue);
+
+    float tableHeight =
+        IS_LANDSCAPE ? PAGE_SIZE.getWidth() - (2 * MARGIN) : PAGE_SIZE.getHeight() - (2 * MARGIN);
+
+    Table table = new TableBuilder()
+        .setCellMargin(CELL_MARGIN)
+        .setColumns(columns)
+        .setContent(content)
+        .setHeight(tableHeight)
+        .setNumberOfRows(content.length)
+        .setRowHeight(ROW_HEIGHT)
+        .setMargin(MARGIN)
+        .setPageSize(PAGE_SIZE)
+        .setLandscape(IS_LANDSCAPE)
+        .setTextFont(TEXT_FONT)
+        .setFontSize(FONT_SIZE)
+        .build();
+
+    return table;
+  }
+
+  private static BigDecimal contentTableItems(Invoice invoice, String[][] content) {
 
     BigDecimal totalGrossValue = BigDecimal.ZERO;
     BigDecimal netPrice = BigDecimal.ZERO;
@@ -56,32 +74,7 @@ public class PdfSet {
       collectDataItem[5] = String.valueOf(netPrice.add(valueTax));
       content[i] = collectDataItem;
     }
-
-    content[content.length - 1][0] = null;
-    content[content.length - 1][1] = "Total Value";
-    content[content.length - 1][2] = getTotalNetValue(invoice).toString() + " PLN";
-    content[content.length - 1][3] = null;
-    content[content.length - 1][4] = totalGrossValue.toString() + " PLN";
-    content[content.length - 1][5] = getTotalGrossValue(invoice).toString() + " PLN";
-
-    float tableHeight =
-        IS_LANDSCAPE ? PAGE_SIZE.getWidth() - (2 * MARGIN) : PAGE_SIZE.getHeight() - (2 * MARGIN);
-
-    Table table = new TableBuilder()
-        .setCellMargin(CELL_MARGIN)
-        .setColumns(columns)
-        .setContent(content)
-        .setHeight(tableHeight)
-        .setNumberOfRows(content.length)
-        .setRowHeight(ROW_HEIGHT)
-        .setMargin(MARGIN)
-        .setPageSize(PAGE_SIZE)
-        .setLandscape(IS_LANDSCAPE)
-        .setTextFont(TEXT_FONT)
-        .setFontSize(FONT_SIZE)
-        .build();
-
-    return table;
+    return totalGrossValue;
   }
 
   private static BigDecimal getTotalNetValue(Invoice invoice) {
@@ -100,5 +93,26 @@ public class PdfSet {
       grossPriceTotal = grossPriceTotal.add(entry.getPrice().multiply(entry.getVat().getValue().divide(BigDecimal.valueOf(100)).add(BigDecimal.ONE)));
     }
     return grossPriceTotal.setScale(2);
+  }
+
+  private static ArrayList<Column> createColumnHeaders() {
+
+    ArrayList<Column> columns = new ArrayList<Column>();
+    columns.add(new Column("no.", 20));
+    columns.add(new Column("description", 150));
+    columns.add(new Column("net price", 80));
+    columns.add(new Column("vat", 40));
+    columns.add(new Column("value vat", 80));
+    columns.add(new Column("gross price", 80));
+    return columns;
+  }
+
+  private static void totalValues(Invoice invoice, String[][] content, BigDecimal totalGrossValue) {
+    content[content.length - 1][0] = null;
+    content[content.length - 1][1] = "Total Value";
+    content[content.length - 1][2] = getTotalNetValue(invoice).toString() + " PLN";
+    content[content.length - 1][3] = null;
+    content[content.length - 1][4] = totalGrossValue.toString() + " PLN";
+    content[content.length - 1][5] = getTotalGrossValue(invoice).toString() + " PLN";
   }
 }
