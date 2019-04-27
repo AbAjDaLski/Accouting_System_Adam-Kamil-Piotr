@@ -171,7 +171,7 @@ public class InvoiceController {
     }
     try {
       ByteArrayOutputStream arrayOutputStream = new PdfService().generatePdf(PdfSet.createContent(
-          invoiceFromDatabase.get()), invoiceFromDatabase.get(), "invoice.pdf");
+          invoiceFromDatabase.get()), invoiceFromDatabase.get(), invoiceFromDatabase.get().getIdentifier() + ".pdf");
       return ResponseEntity.ok(arrayOutputStream.toByteArray());
     } catch (IOException ioex) {
       ioex.printStackTrace();

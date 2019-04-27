@@ -148,7 +148,7 @@ public class PdfService {
     leadingWithNewLine(contentStream, 20);
     contentStream.showText(String.valueOf(invoice.getSeller().getPostalCode() + " " + invoice.getSeller().getLocation()));
     contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
-    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 100, 400));
+    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 100, 350));
     contentStream.showText("Invoice # : " + invoice.getIdentifier());
     leadingWithNewLine(contentStream, 20);
     contentStream.showText(String.valueOf("Invoice date : " + invoice.getIssuedDate()));
