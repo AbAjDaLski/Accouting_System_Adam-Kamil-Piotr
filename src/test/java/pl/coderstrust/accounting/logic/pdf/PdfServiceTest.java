@@ -22,6 +22,6 @@ public class PdfServiceTest {
     new PdfService().generatePdf(givenTable, givenInvoice, "src\\test\\resources\\outputInvoicePdf.pdf");
 
     //then
-    Assert.assertTrue(pdfUtil.compare("invoice.pdf", "src\\test\\resources\\outputInvoicePdf.pdf"));
+    Assert.assertTrue(pdfUtil.compare("FV-2018--11--04--41.pdf", "src\\test\\resources\\outputInvoicePdf.pdf"));
   }
 }

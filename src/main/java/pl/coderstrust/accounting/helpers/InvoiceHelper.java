@@ -247,7 +247,7 @@ public class InvoiceHelper {
     Company seller = new Company("ComputerTech", "7894369785", "ul. Wisniowa 5",
         "00-055",
         "Warszawa");
-    return new Invoice(41, "FV/2018/11/04", LocalDate.of(2018, Month.NOVEMBER, 4), buyer, seller,
+    return new Invoice(41, "FV-2018--11--04--41", LocalDate.of(2018, Month.NOVEMBER, 4), buyer, seller,
         InvoiceHelper.getSampleInvoiceEntriesList());
   }
 
