@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-public class PdfSet {
+public class PdfConfiguration {
 
   private static final PDRectangle PAGE_SIZE = new PDRectangle(841.8898F, 595.27563F);
   private static final float MARGIN = 50;
