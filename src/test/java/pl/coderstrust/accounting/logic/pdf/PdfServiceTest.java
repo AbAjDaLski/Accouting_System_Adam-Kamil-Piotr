@@ -16,7 +16,7 @@ public class PdfServiceTest {
     //given
     PDFUtil pdfUtil = new PDFUtil();
     Invoice givenInvoice = InvoiceHelper.getSampleInvoiceWithId41();
-    Table givenTable = PdfSet.createContent(givenInvoice);
+    Table givenTable = PdfConfiguration.createContent(givenInvoice);
 
     //when
     new PdfService().generatePdf(givenTable, givenInvoice, "src\\test\\resources\\outputInvoicePdf.pdf");

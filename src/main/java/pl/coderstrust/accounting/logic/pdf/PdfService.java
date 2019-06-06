@@ -16,13 +16,13 @@ import java.util.Arrays;
 @Service
 public class PdfService {
 
-  public ByteArrayOutputStream generatePdf(Table table, Invoice invoice, String nameFile) throws IOException {
+  public ByteArrayOutputStream generatePdf(Table table, Invoice invoice, String fileName) throws IOException {
     PDDocument doc = null;
 
     try {
       doc = new PDDocument();
       drawTable(doc, table, invoice);
-      doc.save(nameFile);
+      doc.save(fileName);
       ByteArrayOutputStream output = new ByteArrayOutputStream();
       doc.save(output);
       return output;
@@ -137,21 +137,20 @@ public class PdfService {
     contentStream.setFont(PDType1Font.TIMES_BOLD, 30);
     contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 50, 230));
     contentStream.showText("INVOICE");
-    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 100, 50));
-    contentStream.setFont(PDType1Font.TIMES_BOLD, 17);
-    contentStream.showText("SELLER");
-    leadingWithNewLine(contentStream, 20);
-    contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
-    contentStream.showText(String.valueOf(invoice.getSeller().getName()));
-    leadingWithNewLine(contentStream, 20);
-    contentStream.showText(String.valueOf(invoice.getSeller().getStreetAndNumber()));
-    leadingWithNewLine(contentStream, 20);
-    contentStream.showText(String.valueOf(invoice.getSeller().getPostalCode() + " " + invoice.getSeller().getLocation()));
-    contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
-    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 100, 350));
-    contentStream.showText("Invoice # : " + invoice.getIdentifier());
-    leadingWithNewLine(contentStream, 20);
-    contentStream.showText(String.valueOf("Invoice date : " + invoice.getIssuedDate()));
+    addSeller(invoice, contentStream);
+    getInvoiceNumberAndDate(invoice, contentStream);
+    addBuyer(invoice, contentStream);
+    contentStream.endText();
+    contentStream.close();
+
+    if (table.isLandScape()) {
+      contentStream.transform(new Matrix(0, 1, -1, 0, table.getPageSize().getWidth() + 250, 0));
+    }
+    contentStream.setFont(table.getPdfTextFont(), table.getFontSize());
+    return contentStream;
+  }
+
+  private static void addBuyer(Invoice invoice, PDPageContentStream contentStream) throws IOException {
     contentStream.setFont(PDType1Font.TIMES_BOLD, 17);
     contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 190, 50));
     contentStream.showText("BILL TO");
@@ -162,14 +161,27 @@ public class PdfService {
     contentStream.showText(String.valueOf(invoice.getBuyer().getStreetAndNumber()));
     leadingWithNewLine(contentStream, 20);
     contentStream.showText(String.valueOf(invoice.getBuyer().getPostalCode() + " " + invoice.getBuyer().getLocation()));
-    contentStream.endText();
-    contentStream.close();
+  }
 
-    if (table.isLandScape()) {
-      contentStream.transform(new Matrix(0, 1, -1, 0, table.getPageSize().getWidth() + 250, 0));
-    }
-    contentStream.setFont(table.getPdfTextFont(), table.getFontSize());
-    return contentStream;
+  private static void getInvoiceNumberAndDate(Invoice invoice, PDPageContentStream contentStream) throws IOException {
+    contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
+    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 100, 350));
+    contentStream.showText("Invoice # : " + invoice.getIdentifier());
+    leadingWithNewLine(contentStream, 20);
+    contentStream.showText(String.valueOf("Invoice date : " + invoice.getIssuedDate()));
+  }
+
+  private static void addSeller(Invoice invoice, PDPageContentStream contentStream) throws IOException {
+    contentStream.setTextMatrix(Matrix.getRotateInstance(1.570796326795, 100, 50));
+    contentStream.setFont(PDType1Font.TIMES_BOLD, 17);
+    contentStream.showText("SELLER");
+    leadingWithNewLine(contentStream, 20);
+    contentStream.setFont(PDType1Font.TIMES_ROMAN, 16);
+    contentStream.showText(String.valueOf(invoice.getSeller().getName()));
+    leadingWithNewLine(contentStream, 20);
+    contentStream.showText(String.valueOf(invoice.getSeller().getStreetAndNumber()));
+    leadingWithNewLine(contentStream, 20);
+    contentStream.showText(String.valueOf(invoice.getSeller().getPostalCode() + " " + invoice.getSeller().getLocation()));
   }
 
   private static void leadingWithNewLine(PDPageContentStream contentStream, double leading) throws IOException {

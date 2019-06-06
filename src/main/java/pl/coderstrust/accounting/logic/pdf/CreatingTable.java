@@ -15,7 +15,7 @@ public class CreatingTable {
     return this;
   }
 
-  public CreatingTable setNumberOfRows(Integer numberOfRows) {
+  public CreatingTable setNumberOfRows(int numberOfRows) {
     table.setNumberOfRows(numberOfRows);
     return this;
   }
